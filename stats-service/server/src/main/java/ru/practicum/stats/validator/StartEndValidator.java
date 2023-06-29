@@ -1,4 +1,4 @@
-package ru.practicum.validators;
+package ru.practicum.stats.validator;
 
 import ru.practicum.stats.model.DateRange;
 

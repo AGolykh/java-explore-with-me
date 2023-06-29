@@ -14,11 +14,4 @@ public class EndpointHitDto {
     private String uri;
     private String ip;
     private String timestamp;
-
-    public EndpointHitDto(Long id, String app, String uri, String ip) {
-        this.id = id;
-        this.app = app;
-        this.uri = uri;
-        this.ip = ip;
-    }
 }

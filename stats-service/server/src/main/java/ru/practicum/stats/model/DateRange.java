@@ -1,7 +1,7 @@
 package ru.practicum.stats.model;
 
 import lombok.Data;
-import ru.practicum.validators.StartEndDate;
+import ru.practicum.stats.validator.StartEndDate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

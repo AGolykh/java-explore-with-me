@@ -1,23 +1,17 @@
 package ru.practicum.stats.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.stats.model.EndpointHit;
 
-public class EndpointHitMapper {
+@Mapper(componentModel = "spring")
+public interface EndpointHitMapper {
 
-    public static EndpointHitDto mapToDto(EndpointHit endpointHit) {
-        return new EndpointHitDto(
-                endpointHit.getId(),
-                endpointHit.getApp(),
-                endpointHit.getUri(),
-                endpointHit.getIp());
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "timestamp", target = "timestamp", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    EndpointHit toEndpointHit(EndpointHitDto endpointHitDto);
 
-    public static EndpointHit mapToEndpointHit(EndpointHitDto endpointHitDto, EndpointHit endpointHit) {
-        endpointHit.setId(endpointHitDto.getId());
-        endpointHit.setApp(endpointHitDto.getApp());
-        endpointHit.setUri(endpointHitDto.getUri());
-        endpointHit.setIp(endpointHitDto.getIp());
-        return endpointHit;
-    }
+    @Mapping(source = "timestamp", target = "timestamp", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    EndpointHitDto toEndpointHitDto(EndpointHit endpointHit);
 }

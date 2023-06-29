@@ -3,8 +3,8 @@ services:
 
   stats-server:
     build: stats-service/server/
-    image: stats-server-image
-    container_name: stats-server-container
+    image: stats-image
+    container_name: stats-container
     depends_on:
       - stats-db
     ports:
@@ -27,7 +27,7 @@ services:
   ewm-service:
     build: main-service/
     image: main-image
-    container_name: main
+    container_name: main-container
     ports:
       - "8080:8080"
     depends_on:
