@@ -1,18 +1,19 @@
 version: '3.8'
 services:
-
   stats-server:
-    build: stats-service/server/
+    build:
+      context: ./stats-service/server
+      dockerfile: Dockerfile
     image: stats-image
     container_name: stats-container
-    depends_on:
-      - stats-db
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+      - spring.datasource.url=jdbc:postgresql://stats-db:5432/stats
+      - spring.datasource.user=root
+      - spring.datasource.password=root
 
   stats-db:
     image: postgres:14-alpine
@@ -20,12 +21,15 @@ services:
     ports:
       - "6541:5432"
     environment:
+      - TZ=Europe/Moscow
       - POSTGRES_DB=stats
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
   ewm-service:
-    build: main-service/
+    build:
+      context: ./main-service
+      dockerfile: Dockerfile
     image: main-image
     container_name: main-container
     ports:
@@ -33,9 +37,10 @@ services:
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/main
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+      - spring.datasource.url=jdbc:postgresql://ewm-db:5432/main
+      - spring.datasource.user=root
+      - spring.datasource.password=root
+      - stats-service.url=http://stats-server:9090
 
   ewm-db:
     image: postgres:14-alpine
@@ -43,6 +48,7 @@ services:
     ports:
       - "6542:5432"
     environment:
+      - TZ=Europe/Moscow
       - POSTGRES_DB=main
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
