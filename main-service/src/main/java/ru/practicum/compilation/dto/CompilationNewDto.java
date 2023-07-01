@@ -1,4 +1,4 @@
-package ru.practicum.compilation;
+package ru.practicum.compilation.dto;
 
 import lombok.*;
 
@@ -9,7 +9,6 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class CompilationNewDto {
-
     private boolean pinned;
 
     @NotBlank

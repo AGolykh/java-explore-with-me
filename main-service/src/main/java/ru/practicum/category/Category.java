@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "CATEGORIES", schema = "PUBLIC")
 public class Category {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

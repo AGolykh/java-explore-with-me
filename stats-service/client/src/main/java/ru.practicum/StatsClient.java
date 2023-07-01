@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,11 @@ import java.util.List;
 
 @Service
 public class StatsClient {
-
     private final WebClient webClient;
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public StatsClient() {
-        this.webClient = WebClient.builder()
-                .baseUrl("http://localhost:9090")
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+    public StatsClient(@Value("${stats-service.url}") String host) {
+        this.webClient = WebClient.create(host);
     }
 
     public EndpointHitDto post(EndpointHitDto endpointHitDto) {

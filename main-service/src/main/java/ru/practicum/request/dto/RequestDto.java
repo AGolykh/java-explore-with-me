@@ -1,4 +1,4 @@
-package ru.practicum.request;
+package ru.practicum.request.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class RequestsDto {
+public class RequestDto {
 
     private Long id;
 

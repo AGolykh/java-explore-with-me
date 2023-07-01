@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.EVENTS
     CONFIRMED_REQUESTS INTEGER                                             NOT NULL,
     CREATED_ON         TIMESTAMP WITHOUT TIME ZONE                         NOT NULL,
     DESCRIPTION        VARCHAR(400)                                        NOT NULL,
-    DATE               TIMESTAMP WITHOUT TIME ZONE                         NOT NULL,
+    EVENT_DATE         TIMESTAMP WITHOUT TIME ZONE                         NOT NULL,
     INITIATOR_ID       BIGINT                                              NOT NULL,
     LOCATION_ID        BIGINT                                              NOT NULL,
     PAID               BOOLEAN                                             NOT NULL,

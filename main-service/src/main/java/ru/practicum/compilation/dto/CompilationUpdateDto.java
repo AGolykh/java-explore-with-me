@@ -1,4 +1,4 @@
-package ru.practicum.compilation;
+package ru.practicum.compilation.dto;
 
 import lombok.*;
 
@@ -8,7 +8,6 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class CompilationUpdateDto {
-
     private Boolean pinned;
 
     @Size(max = 128)
