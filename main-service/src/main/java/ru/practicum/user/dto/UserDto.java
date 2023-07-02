@@ -8,12 +8,12 @@ import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
 
     private Long id;
 
     @NotBlank
-    @Email
     private String name;
 
     @NotBlank

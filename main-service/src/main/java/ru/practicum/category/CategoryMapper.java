@@ -4,10 +4,14 @@ import org.mapstruct.Mapper;
 
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.stereotype.Component;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CategoryNewDto;
 
-@Mapper(componentModel = "spring")
+@Component
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CategoryMapper {
     CategoryDto toCategoryDto(Category category);
 

@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CompilationDto {
     private Long id;
     private boolean pinned;

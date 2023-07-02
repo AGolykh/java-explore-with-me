@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CompilationNewDto {
     private boolean pinned;
 

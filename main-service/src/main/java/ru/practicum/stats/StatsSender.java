@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class StatsSender {
     private final StatsClient statsClient;
-
     @Value("${main.service.name}")
     private String serviceName;
 
