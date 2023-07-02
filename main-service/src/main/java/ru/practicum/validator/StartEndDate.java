@@ -1,4 +1,4 @@
-package ru.practicum.stats.validator;
+package ru.practicum.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface StartEndDate {
 
-    String message() default "StartDate must be before AndDate";
+    String message() default "Start Date must be before End Date";
 
     Class<?>[] groups() default {};
 

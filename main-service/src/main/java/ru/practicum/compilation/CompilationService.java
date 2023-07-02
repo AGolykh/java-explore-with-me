@@ -6,11 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.stats.StatsSender;
+import ru.practicum.compilation.dto.CompilationNewDto;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,33 +20,69 @@ import java.util.stream.Collectors;
 public class CompilationService {
     private final CompilationRepository compilationRepository;
     private final CompilationMapper compilationMapper;
-    private final StatsSender statsSender;
 
-    public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size, HttpServletRequest request) {
+    public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
         List<CompilationDto> result = getCompilationsByParams(pinned, getPage(from, size))
                 .stream()
                 .map(compilationMapper::toCompilationDto)
                 .collect(Collectors.toList());
-
         log.info("Found {} compilation(s).", result.size());
-        statsSender.send(request);
         return result;
     }
 
-    public CompilationDto getById(Long compId, HttpServletRequest request) {
+    public CompilationDto getById(Long compId) {
         CompilationDto result = compilationRepository
                 .findById(compId)
                 .map(compilationMapper::toCompilationDto)
                 .orElseThrow(() -> new NullPointerException(String.format("Compilation %d is not found.", compId)));
         log.info("Compilation {} is found.", result.getId());
-        statsSender.send(request);
         return result;
     }
+
+    @Transactional
+    public CompilationDto create(CompilationNewDto compilationNewDto) {
+        CompilationDto result = Optional.of(compilationRepository.save(compilationMapper.toCompilation(compilationNewDto)))
+                .map(compilationMapper::toCompilationDto)
+                .orElseThrow();
+
+        log.info("Compilation {} {} created.", result.getId(), result.getTitle());
+        return result;
+    }
+
+    @Transactional
+    public void deleteById(Long compId) {
+        Compilation result = getCompilationById(compId);
+        compilationRepository.deleteById(result.getId());
+
+        log.info("Compilation {} removed.", result.getTitle());
+    }
+
+    @Transactional
+    public CompilationDto update(Long compId, CompilationNewDto compilationNewDto) {
+        Compilation oldCompilation = getCompilationById(compId);
+        compilationMapper.updateCompilation(oldCompilation, compilationNewDto);
+        CompilationDto result = Optional.of(compilationRepository.save(oldCompilation))
+                .map(compilationMapper::toCompilationDto)
+                .orElseThrow();
+
+        log.info("Compilation category: {}", result.getTitle());
+        return result;
+    }
+
+
 
     private List<Compilation> getCompilationsByParams(Boolean pinned, Pageable pageable) {
         return pinned == null ?
                 compilationRepository.findAll(pageable).toList() :
                 compilationRepository.findAllByPinned(pinned, pageable);
+    }
+
+    public Compilation getCompilationById(Long compId) {
+        Compilation result = compilationRepository
+                .findById(compId)
+                .orElseThrow(() -> new NullPointerException(String.format("Compilation %d is not found.", compId)));
+        log.info("Compilation {} is found.", result.getId());
+        return result;
     }
 
     private PageRequest getPage(Integer from, Integer size) {

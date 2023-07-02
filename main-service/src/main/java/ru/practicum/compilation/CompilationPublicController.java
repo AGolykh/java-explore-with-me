@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -16,13 +15,12 @@ public class CompilationPublicController {
     @GetMapping
     public List<CompilationDto> getAll(@RequestParam(required = false) Boolean pinned,
                                        @RequestParam(defaultValue = "0") Integer from,
-                                       @RequestParam(defaultValue = "10") Integer size,
-                                       HttpServletRequest request) {
-        return compilationService.getAll(pinned, from, size, request);
+                                       @RequestParam(defaultValue = "10") Integer size) {
+        return compilationService.getAll(pinned, from, size);
     }
 
     @GetMapping("/{compId}")
-    public CompilationDto getById(@PathVariable Long compId, HttpServletRequest request) {
-        return compilationService.getById(compId, request);
+    public CompilationDto getById(@PathVariable Long compId) {
+        return compilationService.getById(compId);
     }
 }

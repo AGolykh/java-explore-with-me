@@ -1,4 +1,4 @@
-package ru.practicum.event;
+package ru.practicum.event.model;
 
 import lombok.*;
 import ru.practicum.category.Category;
@@ -24,7 +24,7 @@ public class Event {
     private Category category;
 
     @Column(name = "CONFIRMED_REQUESTS")
-    private long confirmedRequests;
+    private Long confirmedRequests;
 
     @Column(name = "CREATED_ON")
     private LocalDateTime createdOn;

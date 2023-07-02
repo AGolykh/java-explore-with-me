@@ -1,15 +1,26 @@
 package ru.practicum.event;
 
 import org.mapstruct.Mapper;
-import ru.practicum.event.dto.EventDto;
-import ru.practicum.event.dto.EventFullDto;
-import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.category.CategoryMapper;
+import ru.practicum.event.dto.*;
+import ru.practicum.event.model.Event;
+import ru.practicum.user.UserMapper;
 
-@Mapper(componentModel = "spring")
-public interface EventMapper {
-    EventDto eventToEventDto(Event event);
+@Mapper(componentModel = "spring",
+        uses = {CategoryMapper.class, UserMapper.class, LocationMapper.class})
+public interface EventMapper  {
 
-    EventShortDto eventToEventShortDto(Event event);
+    Event toEvent(EventAdminUpdateRequestDto eventAdminUpdateRequestDto);
 
-    EventFullDto eventToEventFullDto(Event event);
+    Event toEvent(Long id);
+
+    Event toEvent(EventUserUpdateRequestDto eventUserUpdateRequestDto);
+
+    Event toEvent(EventUpdateRequestDto eventUpdateRequestDto);
+
+    EventDto toEventDto(Event event);
+
+    EventShortDto toEventShortDto(Event event);
+
+    EventFullDto toEventFullDto(Event event);
 }
