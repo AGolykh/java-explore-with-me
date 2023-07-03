@@ -2,10 +2,14 @@ package ru.practicum.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventNewDto;
+import ru.practicum.event.dto.EventUserUpdateRequestDto;
 import ru.practicum.request.dto.RequestDto;
+import ru.practicum.request.dto.RequestUpdatedDto;
+import ru.practicum.request.dto.RequestsStatusUpdateDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -15,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/users/{userId}/events")
 public class EventPrivateController {
-
     public final EventService eventService;
 
     @GetMapping
@@ -40,11 +43,11 @@ public class EventPrivateController {
         return eventService.getEventByUserEventId(userId, eventId, httpServletRequest);
     }
 
-/*    @PatchMapping("/{eventId}")
+    @PatchMapping("/{eventId}")
     public EventFullDto update(@PathVariable Long userId, @PathVariable Long eventId,
                                @RequestBody @Valid EventUserUpdateRequestDto eventUserUpdateRequestDto) {
         return eventService.update(userId, eventId, eventUserUpdateRequestDto);
-    }*/
+    }
 
     @GetMapping("/{eventId}/requests")
     public List<RequestDto> getRequestsByUserEventId(@PathVariable Long userId,
@@ -52,11 +55,11 @@ public class EventPrivateController {
         return eventService.getRequestsByUserEventId(userId, eventId);
     }
 
-/*    @PatchMapping("/{eventId}/requests")
-    public EventRequestStatusUpdateResultDto updateRequestStatus(
+    @PatchMapping("/{eventId}/requests")
+    public RequestUpdatedDto updateRequestStatus(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @Validated @RequestBody EventRequestStatusUpdateRequestDto request) {
-        return eventService.updateRequestStatus(userId, eventId, request);
-    }*/
+            @Validated @RequestBody RequestsStatusUpdateDto requestsStatusUpdateDto) {
+        return eventService.updateRequestsStatus(userId, eventId, requestsStatusUpdateDto);
+    }
 }

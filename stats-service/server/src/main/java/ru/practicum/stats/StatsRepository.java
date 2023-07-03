@@ -13,12 +13,8 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
     @Query("select new ru.practicum.stats.model.ViewStats(eph.app, eph.uri, count(eph.ip)) " +
             "from EndpointHit eph " +
-            "where (cast(:start as date) != null and cast(:start as date) != null " +
-            "and eph.timestamp between cast(:start as date) and cast(:end as date) ) " +
-            "or (cast(:start as date) = null and eph.timestamp < cast(:end as date) )" +
-            "or (cast(:end as date) = null and eph.timestamp > cast(:start as date) )" +
-            "or (cast(:start as date) = null and cast(:start as date) = null) " +
-            "and (eph.uri in ?3 OR ?3 = null) " +
+            "where eph.timestamp between cast(:start as date) and cast(:end as date) " +
+            "and (eph.uri in :uris OR :uris = null) " +
             "group by eph.app, eph.uri " +
             "order by count(eph.ip) desc")
     List<ViewStats> getStats(@Param("start") LocalDateTime start,
@@ -27,15 +23,11 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
     @Query("select new ru.practicum.stats.model.ViewStats(eph.app, eph.uri, count(distinct eph.ip)) " +
             "from EndpointHit eph " +
-            "where (cast(:start as date) != null and cast(:start as date) != null " +
-            "and eph.timestamp between cast(:start as date) and cast(:end as date) ) " +
-            "or (cast(:start as date) = null and eph.timestamp < cast(:end as date) )" +
-            "or (cast(:end as date) = null and eph.timestamp > cast(:start as date) )" +
-            "or (cast(:start as date) = null and cast(:start as date) = null) " +
-            "and (eph.uri in ?3 OR ?3 = null) " +
+            "where eph.timestamp between cast(:start as date) and cast(:end as date) " +
+            "and (eph.uri in :uris OR :uris = null) " +
             "group by eph.app, eph.uri " +
             "order by count(distinct eph.ip) desc")
     List<ViewStats> getUniqueIPStats(@Param("start") LocalDateTime start,
                                      @Param("end") LocalDateTime end,
-                                     @Param("text") List<String> uris);
+                                     @Param("uris") List<String> uris);
 }

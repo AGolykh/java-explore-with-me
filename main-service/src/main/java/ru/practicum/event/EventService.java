@@ -12,6 +12,7 @@ import ru.practicum.category.CategoryService;
 import ru.practicum.event.dto.EventAdminUpdateRequestDto;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventNewDto;
+import ru.practicum.event.dto.EventUserUpdateRequestDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventSearchParams;
 import ru.practicum.event.model.EventSearchPublicParams;
@@ -22,6 +23,8 @@ import ru.practicum.location.LocationRepository;
 import ru.practicum.request.RequestMapper;
 import ru.practicum.request.RequestRepository;
 import ru.practicum.request.dto.RequestDto;
+import ru.practicum.request.dto.RequestUpdatedDto;
+import ru.practicum.request.dto.RequestsStatusUpdateDto;
 import ru.practicum.stats.StatsSender;
 import ru.practicum.user.User;
 import ru.practicum.user.UserService;
@@ -99,6 +102,7 @@ public class EventService {
         statsSender.send(httpServletRequest);
         return result;
     }
+
     @Transactional
     public EventFullDto create(Long userId, EventNewDto eventNewDto) {
         Event event = makeNewEvent(userId, eventNewDto);
@@ -138,6 +142,18 @@ public class EventService {
 
         log.info("Update event: {}", result.getTitle());
         return result;
+    }
+
+    @Transactional
+    public EventFullDto update(Long userId, Long eventId,
+                               EventUserUpdateRequestDto eventUserUpdateRequestDto) {
+        return null;
+    }
+
+    @Transactional
+    public RequestUpdatedDto updateRequestsStatus(Long userId, Long eventId,
+                                                  RequestsStatusUpdateDto requestsStatusUpdateDto) {
+        return null;
     }
 
     public EventFullDto getEventByUserEventId(Long userId, Long eventId, HttpServletRequest httpServletRequest) {

@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestUpdateDto {
+public class RequestUpdatedDto {
 
     private List<RequestDto> confirmedRequests;
     private List<RequestDto> rejectedRequests;

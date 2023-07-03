@@ -8,8 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestStatusUpdateDto {
-
+public class RequestsStatusUpdateDto {
     private List<Long> requestIds;
     private Status status;
 }
