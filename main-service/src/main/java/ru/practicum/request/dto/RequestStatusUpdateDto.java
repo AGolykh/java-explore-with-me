@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RequestStatusUpdateDto {
 
     private List<Long> requestIds;

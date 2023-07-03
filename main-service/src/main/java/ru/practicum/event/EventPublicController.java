@@ -2,11 +2,7 @@ package ru.practicum.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.model.EventSearchPublicParams;
 
@@ -15,10 +11,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/events")
-public class PublicEventsController {
+public class EventPublicController {
     public final EventService eventService;
 
     @GetMapping

@@ -1,8 +1,6 @@
-package ru.practicum.event;
+package ru.practicum.location;
 
 import org.mapstruct.Mapper;
-import ru.practicum.event.dto.LocationDto;
-import ru.practicum.event.model.Location;
 
 @Mapper(componentModel = "spring")
 public interface LocationMapper {

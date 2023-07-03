@@ -1,13 +1,14 @@
 package ru.practicum.request.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import ru.practicum.request.Status;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RequestDto {
 
     private Long id;
@@ -19,5 +20,5 @@ public class RequestDto {
 
     private Long requester;
 
-    private String status;
+    private Status status;
 }

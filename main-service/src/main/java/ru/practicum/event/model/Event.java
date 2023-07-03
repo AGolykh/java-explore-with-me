@@ -2,6 +2,7 @@ package ru.practicum.event.model;
 
 import lombok.*;
 import ru.practicum.category.Category;
+import ru.practicum.location.Location;
 import ru.practicum.user.User;
 
 import javax.persistence.*;

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.model.State;
+import ru.practicum.location.LocationDto;
 import ru.practicum.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class EventDto {
     private Long id;
     private String annotation;

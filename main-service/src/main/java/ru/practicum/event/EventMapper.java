@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.category.CategoryMapper;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventSearchCriteria;
-import ru.practicum.event.model.EventSearchPublicParams;
+import ru.practicum.location.LocationMapper;
 import ru.practicum.user.UserMapper;
 
 @Component
@@ -24,11 +23,11 @@ public interface EventMapper  {
 
     Event toEvent(EventUpdateRequestDto eventUpdateRequestDto);
 
+    Event toEvent(EventNewDto eventNewDto);
+
     EventDto toEventDto(Event event);
 
     EventShortDto toEventShortDto(Event event);
 
     EventFullDto toEventFullDto(Event event);
-
-    EventSearchCriteria toParams(EventSearchPublicParams eventSearchPublicParams);
 }

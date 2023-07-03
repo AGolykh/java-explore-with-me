@@ -42,7 +42,11 @@ public class ErrorHandler {
         return makeApiError(e, "NOT_FOUND");
     }
 
+
     private ApiError makeApiError(Throwable e, String status) {
         return new ApiError(status, e.getMessage(), e.getCause());
     }
+
+
+
 }

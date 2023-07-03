@@ -58,6 +58,7 @@ public class UserService {
         User result = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new NullPointerException(String.format("User %d is not found.", userId)));
+
         log.info("User {} is found.", result.getId());
         return result;
     }

@@ -1,57 +1,66 @@
 package ru.practicum.event;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.category.Category;
 import ru.practicum.event.model.Event;
+import ru.practicum.event.model.EventSearchPublicParams;
 import ru.practicum.event.model.State;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("select e from Event e " +
-            "where (e.initiator.id in ?1 OR ?1 = null) " +
-            "and (e.state in ?2 OR ?2 = null) " +
-            "and (e.category.id in ?3 OR ?3 = null) " +
-            "and e.eventDate between ?4 and ?5")
-    List<Event> findEventsByParams(
-            Set<Long> users,
-            Set<State> states,
-            Set<Long> categories,
-            LocalDateTime rangeStart,
-            LocalDateTime rangeEnd,
-            Pageable pageable);
+            "where (e.initiator.id in :users OR :users = null) " +
+            "and (e.state in :states OR :states = null) " +
+            "and (e.category.id in :categories OR :categories = null) " +
+            "and (cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
+            "and e.eventDate between cast(:rangeStart as date) and cast(:rangeEndas date)) " +
+            "or (cast(:rangeStart as date) = null and e.eventDate < cast(:rangeEnd as date)) " +
+            "or (cast(:rangeEnd as date) = null and e.eventDate > cast(:rangeStart as date)) " +
+            "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null) ")
+    List<Event> findEventsByParams(@Param("users") Set<Long> users,
+                                   @Param("states") Set<State> states,
+                                   @Param("categories") Set<Long> categories,
+                                   @Param("rangeStart") LocalDateTime rangeStart,
+                                   @Param("rangeEnd") LocalDateTime rangeEnd,
+                                   Pageable pageable);
 
-    @Query("select a from Event a " +
-            "where a.state = 'PUBLISHED' " +
-            "and (:#{#categories == null} = true " +
-            "or a.category.id in :categories) " +
-            "and (:#{#texts == null} = true " +
-            "or (lower(a.annotation) like concat('%', :texts, '%') " +
-            "or lower(a.description) like concat('%', :texts, '%'))) " +
-            "and (:#{#paid == null} = true or a.paid = :paid) " +
-            "and ((:#{#rangeStart != null} = true " +
-            "and :#{#rangeEnd != null} = true " +
-            "and a.eventDate between :rangeStart and :rangeEnd) " +
-            "or ((:#{#rangeStart == null} = true " +
-            "or a.eventDate >= :rangeStart) " +
-            "and (:#{#rangeEnd == null} = true " +
-            "or a.eventDate <= :rangeEnd))) " +
-            "and (:#{#onlyAvailable == false} = true " +
-            "or a.confirmedRequests < a.participantLimit)")
-    Page<Event> findEventsByParams(@Param("texts") String texts,
+    @Query(" select e from Event e " +
+            "where lower(e.annotation) like concat('%', :text, '%') " +
+            "or lower(e.description) like concat('%', :text, '%') " +
+            "or lower(e.title) like concat('%', :text, '%')" +
+            "or :text = null " +
+            "and e.category.id in :categories or :categories = null " +
+            "and e.paid = :paid or :paid = null " +
+            "and (cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
+            "and e.eventDate between cast(:rangeStart as date) and cast(:rangeEnd as date) ) " +
+            "or (cast(:rangeStart as date) = null and e.eventDate < cast(:rangeEnd as date) )" +
+            "or (cast(:rangeEnd as date) = null and e.eventDate > cast(:rangeStart as date) )" +
+            "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null) " +
+            "and e.confirmedRequests < e.participantLimit or :onlyAvailable = null " +
+            "and  e.state = 'PUBLISHED' " +
+            "order by :sortType")
+    List<Event> findEventsByParams(@Param("text") String text,
                                    @Param("categories") Set<Long> categories,
                                    @Param("paid") Boolean paid,
                                    @Param("rangeStart") LocalDateTime rangeStart,
                                    @Param("rangeEnd") LocalDateTime rangeEnd,
                                    @Param("onlyAvailable") Boolean onlyAvailable,
-                                   Pageable page);
+                                   @Param("sortType") EventSearchPublicParams.SortType sort,
+                                   Pageable pageable);
+
+    List<Event> findAllByInitiator_Id(Long userId, Pageable pageable);
+
+    Optional<Event> findByInitiator_IdAndId(Long userId, Long eventId);
 
     boolean existsByCategory(Category category);
+
+    boolean existsByIdAndInitiatorId(Long id, Long userId);
 }
