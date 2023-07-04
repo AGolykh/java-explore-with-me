@@ -17,15 +17,10 @@ import ru.practicum.user.UserMapper;
         uses = {UserMapper.class, CategoryMapper.class, EventMapper.class, LocationMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CompilationMapper {
-
-    @Mapping(target = "events", ignore = true)
     CompilationDto toCompilationDto(Compilation compilation);
-
-    Compilation toCompilation(CompilationDto compilationDto);
 
     @Mapping(target = "events", ignore = true)
     Compilation toCompilation(CompilationNewDto compilationNewDto);
 
-    @Mapping(target = "id", ignore = true)
     void updateCompilation(@MappingTarget Compilation compilation, CompilationNewDto compilationNewDto);
 }

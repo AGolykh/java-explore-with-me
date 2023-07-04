@@ -1,6 +1,7 @@
 package ru.practicum.event;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/events")
 public class EventPublicController {
@@ -29,6 +31,9 @@ public class EventPublicController {
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size,
             HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.getAll(new EventSearchPublicParams(text,
                         categories,
                         paid,
@@ -42,7 +47,11 @@ public class EventPublicController {
     }
 
     @GetMapping("/{id}")
-    public EventFullDto getById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
+    public EventFullDto getById(@PathVariable Long id,
+                                HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.getById(id, httpServletRequest);
     }
 }

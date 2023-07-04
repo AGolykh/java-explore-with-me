@@ -2,6 +2,7 @@ package ru.practicum.event.dto;
 
 import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

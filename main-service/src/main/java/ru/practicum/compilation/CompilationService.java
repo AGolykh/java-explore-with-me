@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CompilationNewDto;
+import ru.practicum.event.EventRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class CompilationService {
+    private final EventRepository eventRepository;
     private final CompilationRepository compilationRepository;
     private final CompilationMapper compilationMapper;
 
@@ -26,6 +29,7 @@ public class CompilationService {
                 .stream()
                 .map(compilationMapper::toCompilationDto)
                 .collect(Collectors.toList());
+
         log.info("Found {} compilation(s).", result.size());
         return result;
     }
@@ -35,17 +39,39 @@ public class CompilationService {
                 .findById(compId)
                 .map(compilationMapper::toCompilationDto)
                 .orElseThrow(() -> new NullPointerException(String.format("Compilation %d is not found.", compId)));
+
         log.info("Compilation {} is found.", result.getId());
         return result;
     }
 
     @Transactional
     public CompilationDto create(CompilationNewDto compilationNewDto) {
-        CompilationDto result = Optional.of(compilationRepository.save(compilationMapper.toCompilation(compilationNewDto)))
+        Compilation compilation = compilationMapper.toCompilation(compilationNewDto);
+        if (compilationNewDto.getEvents() != null) {
+            compilation.setEvents(new HashSet<>(eventRepository.findAllByIdIn(compilationNewDto.getEvents())));
+        }
+
+        CompilationDto result = Optional.of(compilationRepository.save(compilation))
                 .map(compilationMapper::toCompilationDto)
                 .orElseThrow();
 
         log.info("Compilation {} {} created.", result.getId(), result.getTitle());
+        return result;
+    }
+
+    @Transactional
+    public CompilationDto update(Long compId, CompilationNewDto compilationNewDto) {
+        Compilation oldCompilation = getCompilationById(compId);
+        compilationMapper.updateCompilation(oldCompilation, compilationNewDto);
+        if (compilationNewDto.getEvents() != null) {
+            oldCompilation.setEvents(new HashSet<>(eventRepository.findAllByIdIn(compilationNewDto.getEvents())));
+        }
+
+        CompilationDto result = Optional.of(compilationRepository.save(oldCompilation))
+                .map(compilationMapper::toCompilationDto)
+                .orElseThrow();
+
+        log.info("Compilation category: {}", result.getTitle());
         return result;
     }
 
@@ -57,32 +83,18 @@ public class CompilationService {
         log.info("Compilation {} removed.", result.getTitle());
     }
 
-    @Transactional
-    public CompilationDto update(Long compId, CompilationNewDto compilationNewDto) {
-        Compilation oldCompilation = getCompilationById(compId);
-        compilationMapper.updateCompilation(oldCompilation, compilationNewDto);
-        CompilationDto result = Optional.of(compilationRepository.save(oldCompilation))
-                .map(compilationMapper::toCompilationDto)
-                .orElseThrow();
-
-        log.info("Compilation category: {}", result.getTitle());
-        return result;
-    }
-
-
-
-    private List<Compilation> getCompilationsByParams(Boolean pinned, Pageable pageable) {
-        return pinned == null ?
-                compilationRepository.findAll(pageable).toList() :
-                compilationRepository.findAllByPinned(pinned, pageable);
-    }
-
     public Compilation getCompilationById(Long compId) {
         Compilation result = compilationRepository
                 .findById(compId)
                 .orElseThrow(() -> new NullPointerException(String.format("Compilation %d is not found.", compId)));
         log.info("Compilation {} is found.", result.getId());
         return result;
+    }
+
+    private List<Compilation> getCompilationsByParams(Boolean pinned, Pageable pageable) {
+        return pinned == null ?
+                compilationRepository.findAll(pageable).toList() :
+                compilationRepository.findAllByPinned(pinned, pageable);
     }
 
     private PageRequest getPage(Integer from, Integer size) {

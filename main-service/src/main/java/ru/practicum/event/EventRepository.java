@@ -15,13 +15,12 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-
     @Query("select e from Event e " +
             "where (e.initiator.id in :users OR :users = null) " +
             "and (e.state in :states OR :states = null) " +
             "and (e.category.id in :categories OR :categories = null) " +
             "and (cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
-            "and e.eventDate between cast(:rangeStart as date) and cast(:rangeEndas date)) " +
+            "and e.eventDate between cast(:rangeStart as date) and cast(:rangeEnd as date)) " +
             "or (cast(:rangeStart as date) = null and e.eventDate < cast(:rangeEnd as date)) " +
             "or (cast(:rangeEnd as date) = null and e.eventDate > cast(:rangeStart as date)) " +
             "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null) ")
@@ -63,4 +62,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     boolean existsByCategory(Category category);
 
     boolean existsByIdAndInitiatorId(Long id, Long userId);
+
+    List<Event> findAllByIdIn(Set<Long> ids);
+
 }

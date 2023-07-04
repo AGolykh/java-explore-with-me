@@ -10,7 +10,6 @@ import ru.practicum.user.dto.UserShortDto;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
-
     User toUser(UserDto userDto);
 
     UserDto toUserDto(User user);

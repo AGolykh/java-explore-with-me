@@ -11,6 +11,7 @@ import ru.practicum.event.model.EventSearchParams;
 import ru.practicum.event.model.State;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -33,13 +34,20 @@ public class EventAdminController {
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size,
             HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.getAll(new EventSearchParams(users, states, categories, rangeStart, rangeEnd, from, size),
                 httpServletRequest);
     }
 
     @PatchMapping("/{eventId}")
     public EventFullDto update(@PathVariable Long eventId,
-                               @RequestBody EventAdminUpdateRequestDto eventAdminUpdateRequestDto) {
+                               @RequestBody @Valid EventAdminUpdateRequestDto eventAdminUpdateRequestDto,
+                               HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.update(eventId, eventAdminUpdateRequestDto);
     }
 }

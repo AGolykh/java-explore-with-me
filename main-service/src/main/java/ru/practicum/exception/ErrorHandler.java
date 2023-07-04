@@ -37,16 +37,24 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handle(final IllegalArgumentException e) {
+        return makeApiError(e, "CONFLICT");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handle(final IllegalStateException e) {
+        return makeApiError(e, "CONFLICT");
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handle(final NullPointerException e) {
         return makeApiError(e, "NOT_FOUND");
     }
 
-
     private ApiError makeApiError(Throwable e, String status) {
         return new ApiError(status, e.getMessage(), e.getCause());
     }
-
-
-
 }

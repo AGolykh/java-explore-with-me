@@ -1,13 +1,11 @@
 package ru.practicum.event.model;
 
 import lombok.Data;
-import ru.practicum.validator.StartEndDate;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
-@StartEndDate
 public class EventSearchParams {
     private Set<Long> users;
     private Set<State> states;

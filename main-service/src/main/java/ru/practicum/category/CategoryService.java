@@ -48,6 +48,8 @@ public class CategoryService {
                 .map(categoryMapper::toCategoryDto)
                 .orElseThrow();
 
+
+
         log.info("Category {} {} created.", result.getId(), result.getName());
         return result;
     }
@@ -56,7 +58,7 @@ public class CategoryService {
     public void deleteById(Long catId) {
         Category result = getCategoryById(catId);
         if (eventRepository.existsByCategory(result)) {
-            throw new IllegalArgumentException("The category is not empty");
+            throw new IllegalArgumentException("The category is not empty.");
         }
         categoryRepository.deleteById(result.getId());
 
@@ -82,7 +84,6 @@ public class CategoryService {
         log.info("Category {} is found.", result.getId());
         return result;
     }
-
 
     private PageRequest getPage(Integer from, Integer size) {
         if (size <= 0 || from < 0) {

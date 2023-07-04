@@ -1,6 +1,7 @@
 package ru.practicum.event;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users/{userId}/events")
@@ -26,32 +29,50 @@ public class EventPrivateController {
                                      @RequestParam(defaultValue = "0") Integer from,
                                      @RequestParam(defaultValue = "10") Integer size,
                                      HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.getAll(userId, from, size, httpServletRequest);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(@PathVariable Long userId,
-                               @RequestBody @Valid EventNewDto eventDto) {
+                               @RequestBody @Valid EventNewDto eventDto,
+                               HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.create(userId, eventDto);
     }
 
     @GetMapping("/{eventId}")
     public EventFullDto getByUserEventId(@PathVariable Long userId,
                             @PathVariable Long eventId,
-                            HttpServletRequest httpServletRequest) {
+                                         HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.getEventByUserEventId(userId, eventId, httpServletRequest);
     }
 
     @PatchMapping("/{eventId}")
     public EventFullDto update(@PathVariable Long userId, @PathVariable Long eventId,
-                               @RequestBody @Valid EventUserUpdateRequestDto eventUserUpdateRequestDto) {
+                               @RequestBody @Valid EventUserUpdateRequestDto eventUserUpdateRequestDto,
+                               HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.update(userId, eventId, eventUserUpdateRequestDto);
     }
 
     @GetMapping("/{eventId}/requests")
     public List<RequestDto> getRequestsByUserEventId(@PathVariable Long userId,
-                                        @PathVariable Long eventId) {
+                                        @PathVariable Long eventId,
+                                                     HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.getRequestsByUserEventId(userId, eventId);
     }
 
@@ -59,7 +80,11 @@ public class EventPrivateController {
     public RequestUpdatedDto updateRequestStatus(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @Validated @RequestBody RequestsStatusUpdateDto requestsStatusUpdateDto) {
+            @RequestBody @Valid RequestsStatusUpdateDto requestsStatusUpdateDto,
+            HttpServletRequest httpServletRequest) {
+        log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
+                httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr());
         return eventService.updateRequestsStatus(userId, eventId, requestsStatusUpdateDto);
     }
 }

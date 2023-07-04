@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "LOCATIONS", schema = "PUBLIC")
 public class Location {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
