@@ -58,7 +58,7 @@ public class CategoryService {
     public void deleteById(Long catId) {
         Category result = getCategoryById(catId);
         if (eventRepository.existsByCategory(result)) {
-            throw new IllegalArgumentException("The category is not empty.");
+            throw new IllegalStateException("The category is not empty.");
         }
         categoryRepository.deleteById(result.getId());
 

@@ -45,15 +45,15 @@ public class RequestService {
         Event event = eventService.getEventById(eventId);
 
         if (userId.equals(event.getInitiator().getId())) {
-            throw new IllegalArgumentException(String
+            throw new IllegalStateException(String
                     .format("User with id=%d must not be equal to initiator", userId));
         }
         if (!event.getState().equals(State.PUBLISHED)) {
-            throw new IllegalArgumentException(String
+            throw new IllegalStateException(String
                     .format("Event with id=%d is not published", eventId));
         }
         if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
-            throw new IllegalArgumentException(String
+            throw new IllegalStateException(String
                     .format("Event with id=%d has reached participant limit", eventId));
         }
         if (!event.getRequestModeration()) {

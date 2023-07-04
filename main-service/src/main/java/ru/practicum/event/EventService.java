@@ -27,6 +27,7 @@ import ru.practicum.user.User;
 import ru.practicum.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +75,10 @@ public class EventService {
 
     public List<EventFullDto> getAll(EventSearchPublicParams eventSearchPublicParams,
                                      HttpServletRequest httpServletRequest) {
+        if ((eventSearchPublicParams.getRangeStart() != null) && (eventSearchPublicParams.getRangeEnd() != null)) {
+            validateDate(eventSearchPublicParams.getRangeStart(), eventSearchPublicParams.getRangeEnd());
+        }
+
         List<EventFullDto> result = eventRepository
                 .findEventsByParams(eventSearchPublicParams.getText(),
                         eventSearchPublicParams.getCategories(),
@@ -147,7 +152,7 @@ public class EventService {
         Event event = getEventById(eventId);
 
         if (!event.getInitiator().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("You don't have event with id " + eventId);
+            throw new IllegalStateException("You don't have event with id " + eventId);
         }
 
         List<Request> updatedRequestStatus = requestRepository
@@ -181,7 +186,7 @@ public class EventService {
 
     public List<RequestDto> getRequestsByUserEventId(Long userId, Long eventId) {
         if (!eventRepository.existsByIdAndInitiatorId(eventId, userId)) {
-            throw new IllegalArgumentException(
+            throw new IllegalStateException(
                     String.format("Event not found with id = %s and userId = %s", eventId, userId));
         }
 
@@ -218,27 +223,9 @@ public class EventService {
         return result;
     }
 
-    private void validateDate(LocalDateTime eventDate) {
-        if (eventDate != null && eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-            throw new IllegalArgumentException("There must be more than 2 hours before the event");
-        }
-    }
-
-    private void validateDate(LocalDateTime start, LocalDateTime end) {
-        if (!(start.isBefore(end) && !start.equals(end))) {
-            throw new IllegalArgumentException("StartDate must be before EndDate");
-        }
-    }
-
-    private PageRequest getPage(Integer from, Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new IllegalArgumentException("Page size must not be less than one.");
-        }
-        return PageRequest.of(from / size, size, Sort.by("id").ascending());
-    }
 
     private Event makeNewEvent(Long userId, EventNewDto eventNewDto) {
-        validateDate(eventNewDto.getEventDate());
+        validateBeforeDate(eventNewDto.getEventDate(), 2);
         User user = userService.getUserById(userId);
         Event event = eventMapper.toEvent(eventNewDto);
         Category category = categoryService.getCategoryById(eventNewDto.getCategory());
@@ -262,45 +249,42 @@ public class EventService {
                                                                      Long eventId,
                                                                      T eventUpdateRequestDto) {
         Event oldEvent = getEventById(eventId);
-        validateDate(oldEvent.getEventDate());
-
-        if (!oldEvent.getState().equals(PENDING)) {
-            throw new IllegalStateException("Wrong state of event: " +
-                    oldEvent.getState());
-        }
 
         if (eventUpdateRequestDto instanceof EventAdminUpdateRequestDto) {
             eventMapper.updateEvent(oldEvent, (EventAdminUpdateRequestDto) eventUpdateRequestDto);
-            if (((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction() != null) {
-                if (((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(PUBLISH_EVENT)) {
-                    oldEvent.setState(PUBLISHED);
-                    oldEvent.setPublishedOn(LocalDateTime.now());
-                }
-                if (((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(REJECT_EVENT)) {
-                    oldEvent.setState(CANCELED);
-                }
+
+            validateBeforeDate(oldEvent.getEventDate(), 1);
+
+            if ((oldEvent.getState().equals(PENDING)) &&
+                    ((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(PUBLISH_EVENT)) {
+                oldEvent.setState(PUBLISHED);
+                oldEvent.setPublishedOn(LocalDateTime.now());
+            } else if ((!oldEvent.getState().equals(PUBLISHED)) &&
+                    ((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(REJECT_EVENT)) {
+                oldEvent.setState(CANCELED);
+            } else {
+                throw new IllegalStateException("Wrong state of event: " +
+                        oldEvent.getState());
             }
         } else if (eventUpdateRequestDto instanceof EventUserUpdateRequestDto) {
             eventMapper.updateEvent(oldEvent, (EventUserUpdateRequestDto) eventUpdateRequestDto);
             User user = userService.getUserById(userId);
 
+            validateBeforeDate(oldEvent.getEventDate(), 2);
+
             if (!oldEvent.getInitiator().getId().equals(user.getId())) {
-                throw new IllegalArgumentException("You don't have event with id " + eventId);
+                throw new IllegalStateException("You don't have event with id " + eventId);
             }
 
-            if (!oldEvent.getState().equals(CANCELED)) {
-                throw new IllegalStateException("Wrong state of event: " +
-                        oldEvent.getState());
+            if (!oldEvent.getRequestModeration() && !oldEvent.getState().equals(CANCELED)) {
+                throw new IllegalStateException("You don't have event with id " + eventId);
             }
 
-            if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction() != null){
-                if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(SEND_TO_REVIEW)) {
-                    oldEvent.setState(PENDING);
-                    oldEvent.setPublishedOn(LocalDateTime.now());
-                }
-                if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(CANCEL_REVIEW)) {
-                    oldEvent.setState(CANCELED);
-                }
+            if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(SEND_TO_REVIEW)) {
+                oldEvent.setState(PENDING);
+                oldEvent.setPublishedOn(LocalDateTime.now());
+            } else if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(CANCEL_REVIEW)) {
+                oldEvent.setState(CANCELED);
             }
         }
 
@@ -318,4 +302,24 @@ public class EventService {
         }
         return oldEvent;
     }
+
+    private void validateBeforeDate(LocalDateTime eventDate, Integer hours) {
+        if (eventDate != null && eventDate.isBefore(LocalDateTime.now().plusHours(hours))) {
+            throw new IllegalArgumentException("There must be more than 2 hours before the event");
+        }
+    }
+
+    private void validateDate(LocalDateTime start, LocalDateTime end) {
+        if (!(start.isBefore(end) && !start.equals(end))) {
+            throw new DateTimeException("StartDate must be before EndDate");
+        }
+    }
+
+    private PageRequest getPage(Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new IllegalArgumentException("Page size must not be less than one.");
+        }
+        return PageRequest.of(from / size, size, Sort.by("id").ascending());
+    }
+
 }

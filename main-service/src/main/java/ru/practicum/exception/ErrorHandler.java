@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.DateTimeException;
+
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
@@ -37,9 +39,9 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handle(final IllegalArgumentException e) {
-        return makeApiError(e, "CONFLICT");
+        return makeApiError(e, "BAD_REQUEST");
     }
 
     @ExceptionHandler
@@ -52,6 +54,13 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handle(final NullPointerException e) {
         return makeApiError(e, "NOT_FOUND");
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handle(final DateTimeException e) {
+        return makeApiError(e, "BAD_REQUEST");
     }
 
     private ApiError makeApiError(Throwable e, String status) {
