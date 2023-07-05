@@ -331,7 +331,7 @@ public class EventService {
                 throw new IllegalStateException("You don't have event with id " + eventId);
             }
 
-            if (oldEvent.getState().equals(PUBLISHED) ) {
+            if (oldEvent.getState().equals(PUBLISHED)) {
                 throw new IllegalStateException("Wrong state of event: " +
                         oldEvent.getState());
             }
