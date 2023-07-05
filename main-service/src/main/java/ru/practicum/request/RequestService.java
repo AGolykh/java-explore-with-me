@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.EventRepository;
 import ru.practicum.event.EventService;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.State;
 import ru.practicum.request.dto.RequestDto;
 import ru.practicum.user.User;
 import ru.practicum.user.UserService;
@@ -16,6 +15,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static ru.practicum.event.model.State.PUBLISHED;
+import static ru.practicum.request.Status.CANCELED;
+import static ru.practicum.request.Status.CONFIRMED;
 
 @Service
 @RequiredArgsConstructor
@@ -46,22 +49,32 @@ public class RequestService {
 
         if (userId.equals(event.getInitiator().getId())) {
             throw new IllegalStateException(String
-                    .format("User with id=%d must not be equal to initiator", userId));
+                    .format("User %d must not be equal to initiator", userId));
         }
-        if (!event.getState().equals(State.PUBLISHED)) {
+
+        if (requestRepository.existsByEvent_IdAndRequester_Id(event.getId(), user.getId())) {
+            throw new IllegalStateException(String
+                    .format("Request by user %d already exists in event %d ", userId, eventId));
+        }
+
+        if (!event.getState().equals(PUBLISHED)) {
             throw new IllegalStateException(String
                     .format("Event with id=%d is not published", eventId));
         }
-        if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
+
+        if (!event.getParticipantLimit().equals(0L) &&
+                event.getParticipantLimit().equals(event.getConfirmedRequests())) {
             throw new IllegalStateException(String
                     .format("Event with id=%d has reached participant limit", eventId));
         }
-        if (!event.getRequestModeration()) {
+
+        Request request = new Request(null, event, user, LocalDateTime.now(), Status.PENDING);
+
+        if (!event.getRequestModeration() || event.getParticipantLimit().equals(0L)) {
+            request.setStatus(CONFIRMED);
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventRepository.save(event);
         }
-
-        Request request = new Request(null, event, user, LocalDateTime.now(), Status.PENDING);
 
         RequestDto result = Optional.of(requestRepository.save(request))
                 .map(requestMapper::toRequestDto)
@@ -76,7 +89,7 @@ public class RequestService {
         Request request = requestRepository.findByIdAndRequester_Id(requestId, userId)
                 .orElseThrow(() -> new NullPointerException(String.format("Request with id=%d " +
                         "and requesterId=%d was not found", requestId, userId)));
-        request.setStatus(Status.CANCELED);
+        request.setStatus(CANCELED);
         RequestDto result = Optional.of(requestRepository.save(request))
                 .map(requestMapper::toRequestDto)
                 .orElseThrow();

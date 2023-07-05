@@ -41,7 +41,7 @@ public class CategoryAdminController {
 
     @PatchMapping("/{catId}")
     public CategoryDto update(@PathVariable Long catId,
-                              @RequestBody CategoryNewDto categoryNewDto,
+                              @RequestBody @Valid CategoryNewDto categoryNewDto,
                               HttpServletRequest httpServletRequest) {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),

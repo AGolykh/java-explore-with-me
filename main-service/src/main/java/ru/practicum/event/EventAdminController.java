@@ -31,8 +31,8 @@ public class EventAdminController {
             @RequestParam(required = false) Set<Long> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "0") Integer from,
-            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false, defaultValue = "0") Integer from,
+            @RequestParam(required = false, defaultValue = "10") Integer size,
             HttpServletRequest httpServletRequest) {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),

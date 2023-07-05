@@ -32,9 +32,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                    Pageable pageable);
 
     @Query(" select e from Event e " +
-            "where lower(e.annotation) like concat('%', :text, '%') " +
-            "or lower(e.description) like concat('%', :text, '%') " +
-            "or lower(e.title) like concat('%', :text, '%')" +
+            "where lower(e.annotation) like lower(concat('%', :text, '%')) " +
+            "or lower(e.description) like lower(concat('%', :text, '%')) " +
+            "or lower(e.title) like lower(concat('%', :text, '%'))" +
             "or :text = null " +
             "and e.category.id in :categories or :categories = null " +
             "and e.paid = :paid or :paid = null " +

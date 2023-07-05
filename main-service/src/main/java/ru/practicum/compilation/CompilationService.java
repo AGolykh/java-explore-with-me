@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CompilationNewDto;
+import ru.practicum.compilation.dto.CompilationUpdateDto;
 import ru.practicum.event.EventRepository;
 
 import java.util.HashSet;
@@ -60,11 +61,11 @@ public class CompilationService {
     }
 
     @Transactional
-    public CompilationDto update(Long compId, CompilationNewDto compilationNewDto) {
+    public CompilationDto update(Long compId, CompilationUpdateDto compilationUpdateDto) {
         Compilation oldCompilation = getCompilationById(compId);
-        compilationMapper.updateCompilation(oldCompilation, compilationNewDto);
-        if (compilationNewDto.getEvents() != null) {
-            oldCompilation.setEvents(new HashSet<>(eventRepository.findAllByIdIn(compilationNewDto.getEvents())));
+        compilationMapper.updateCompilation(oldCompilation, compilationUpdateDto);
+        if (compilationUpdateDto.getEvents() != null) {
+            oldCompilation.setEvents(new HashSet<>(eventRepository.findAllByIdIn(compilationUpdateDto.getEvents())));
         }
 
         CompilationDto result = Optional.of(compilationRepository.save(oldCompilation))

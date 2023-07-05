@@ -18,6 +18,9 @@ import ru.practicum.user.UserMapper;
 public interface EventMapper  {
     Event toEvent(Long id);
 
+    @Mapping(target = "state", ignore = true)
+    @Mapping(target = "location", ignore = true)
+    @Mapping(target = "category", ignore = true)
     Event toEvent(EventNewDto eventNewDto);
 
     EventShortDto toEventShortDto(Event event);

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.category.CategoryMapper;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CompilationNewDto;
+import ru.practicum.compilation.dto.CompilationUpdateDto;
 import ru.practicum.event.EventMapper;
 import ru.practicum.location.LocationMapper;
 import ru.practicum.user.UserMapper;
@@ -22,5 +23,5 @@ public interface CompilationMapper {
     @Mapping(target = "events", ignore = true)
     Compilation toCompilation(CompilationNewDto compilationNewDto);
 
-    void updateCompilation(@MappingTarget Compilation compilation, CompilationNewDto compilationNewDto);
+    void updateCompilation(@MappingTarget Compilation compilation, CompilationUpdateDto compilationUpdateDto);
 }

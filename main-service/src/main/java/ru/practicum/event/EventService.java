@@ -35,9 +35,8 @@ import java.util.stream.Collectors;
 
 import static ru.practicum.event.dto.EventAdminUpdateRequestDto.StateAction.PUBLISH_EVENT;
 import static ru.practicum.event.dto.EventAdminUpdateRequestDto.StateAction.REJECT_EVENT;
-import static ru.practicum.event.dto.EventUserUpdateRequestDto.StateAction.CANCEL_REVIEW;
-import static ru.practicum.event.dto.EventUserUpdateRequestDto.StateAction.SEND_TO_REVIEW;
 import static ru.practicum.event.model.State.*;
+import static ru.practicum.request.Status.CONFIRMED;
 
 @Service
 @Slf4j
@@ -53,17 +52,24 @@ public class EventService {
     private final RequestMapper requestMapper;
     private final StatsSender statsSender;
 
+    @Transactional
     public List<EventFullDto> getAll(EventSearchParams eventSearchParams,
                                      HttpServletRequest httpServletRequest) {
-        validateDate(eventSearchParams.getRangeStart(), eventSearchParams.getRangeEnd());
-        List<EventFullDto> result = eventRepository.findEventsByParams(
-                        eventSearchParams.getUsers(),
-                        eventSearchParams.getStates(),
-                        eventSearchParams.getCategories(),
-                        eventSearchParams.getRangeStart(),
-                        eventSearchParams.getRangeEnd(),
-                        getPage(eventSearchParams.getFrom(),
-                                eventSearchParams.getSize()))
+        if ((eventSearchParams.getRangeStart() != null) && (eventSearchParams.getRangeEnd() != null)) {
+            validateDate(eventSearchParams.getRangeStart(), eventSearchParams.getRangeEnd());
+        }
+        List<Event> events = eventRepository.findEventsByParams(
+                eventSearchParams.getUsers(),
+                eventSearchParams.getStates(),
+                eventSearchParams.getCategories(),
+                eventSearchParams.getRangeStart(),
+                eventSearchParams.getRangeEnd(),
+                getPage(eventSearchParams.getFrom(),
+                        eventSearchParams.getSize()));
+
+        addViews(events);
+
+        List<EventFullDto> result = events
                 .stream()
                 .map(eventMapper::toEventFullDto)
                 .collect(Collectors.toList());
@@ -73,13 +79,14 @@ public class EventService {
         return result;
     }
 
+    @Transactional
     public List<EventFullDto> getAll(EventSearchPublicParams eventSearchPublicParams,
                                      HttpServletRequest httpServletRequest) {
         if ((eventSearchPublicParams.getRangeStart() != null) && (eventSearchPublicParams.getRangeEnd() != null)) {
             validateDate(eventSearchPublicParams.getRangeStart(), eventSearchPublicParams.getRangeEnd());
         }
 
-        List<EventFullDto> result = eventRepository
+        List<Event> events = eventRepository
                 .findEventsByParams(eventSearchPublicParams.getText(),
                         eventSearchPublicParams.getCategories(),
                         eventSearchPublicParams.getPaid(),
@@ -88,7 +95,11 @@ public class EventService {
                         eventSearchPublicParams.getOnlyAvailable(),
                         eventSearchPublicParams.getSort(),
                         getPage(eventSearchPublicParams.getFrom(),
-                                eventSearchPublicParams.getSize()))
+                                eventSearchPublicParams.getSize()));
+
+        addViews(events);
+
+        List<EventFullDto> result = events
                 .stream()
                 .map(eventMapper::toEventFullDto)
                 .collect(Collectors.toList());
@@ -98,10 +109,15 @@ public class EventService {
         return result;
     }
 
+    @Transactional
     public List<EventFullDto> getAll(Long userId, Integer from, Integer size,
                                      HttpServletRequest httpServletRequest) {
         User user = userService.getUserById(userId);
-        List<EventFullDto> result = eventRepository.findAllByInitiator_Id(user.getId(), getPage(from, size))
+        List<Event> events = eventRepository.findAllByInitiator_Id(user.getId(), getPage(from, size));
+
+        addViews(events);
+
+        List<EventFullDto> result = events
                 .stream()
                 .map(eventMapper::toEventFullDto)
                 .collect(Collectors.toList());
@@ -155,29 +171,46 @@ public class EventService {
             throw new IllegalStateException("You don't have event with id " + eventId);
         }
 
+        if (event.getConfirmedRequests() +
+                requestsStatusUpdateDto.getRequestIds().size() > event.getParticipantLimit()) {
+            throw new IllegalStateException("Limit ");
+        }
+
         List<Request> updatedRequestStatus = requestRepository
                 .findAllByIdIn(requestsStatusUpdateDto.getRequestIds());
-        updatedRequestStatus.forEach(request -> request.setStatus(requestsStatusUpdateDto.getStatus()));
 
-        List<RequestDto> confirmedRequests = requestRepository.findAllByEvent_IdAndStatus(eventId, Status.CONFIRMED)
+        updatedRequestStatus.forEach(request -> {
+            if (request.getStatus().equals(CONFIRMED)) {
+                throw new IllegalStateException("Request already confirmed " + request.getId());
+            }
+        });
+
+        updatedRequestStatus.forEach(request -> request.setStatus(requestsStatusUpdateDto.getStatus()));
+        event.setConfirmedRequests(event.getConfirmedRequests() + updatedRequestStatus.size());
+
+        requestRepository.saveAll(updatedRequestStatus);
+        eventRepository.save(event);
+
+        List<RequestDto> confirmedRequests = requestRepository.findAllByEvent_IdAndStatus(eventId, CONFIRMED)
                 .stream()
                 .map(requestMapper::toRequestDto)
                 .collect(Collectors.toList());
-
         List<RequestDto> rejectedRequests = requestRepository.findAllByEvent_IdAndStatus(eventId, Status.REJECTED)
                 .stream()
                 .map(requestMapper::toRequestDto)
                 .collect(Collectors.toList());
 
-        RequestUpdatedDto result = new RequestUpdatedDto(confirmedRequests, rejectedRequests);
-        return result;
+        return new RequestUpdatedDto(confirmedRequests, rejectedRequests);
     }
 
     public EventFullDto getEventByUserEventId(Long userId, Long eventId, HttpServletRequest httpServletRequest) {
         User user = userService.getUserById(userId);
-        EventFullDto result = eventRepository.findByInitiator_IdAndId(user.getId(), eventId)
-                .map(eventMapper::toEventFullDto)
+        Event event = eventRepository.findByInitiator_IdAndId(user.getId(), eventId)
                 .orElseThrow();
+
+        addViews(List.of(event));
+
+        EventFullDto result = eventMapper.toEventFullDto(event);
 
         log.info("Found event {}.", result.getId());
         statsSender.send(httpServletRequest);
@@ -205,10 +238,9 @@ public class EventService {
             throw new NullPointerException();
         }
 
-        EventFullDto result = eventRepository
-                .findById(eventId)
-                .map(eventMapper::toEventFullDto)
-                .orElseThrow(() -> new NullPointerException(String.format("Event %d is not found.", eventId)));
+        addViews(List.of(event));
+
+        EventFullDto result = eventMapper.toEventFullDto(event);
 
         log.info("Event {} is found.", result.getId());
         statsSender.send(httpServletRequest);
@@ -223,6 +255,10 @@ public class EventService {
         return result;
     }
 
+    private void addViews(List<Event> events) {
+        events.forEach(event -> event.setViews(+1L));
+        eventRepository.saveAll(events);
+    }
 
     private Event makeNewEvent(Long userId, EventNewDto eventNewDto) {
         validateBeforeDate(eventNewDto.getEventDate(), 2);
@@ -241,7 +277,11 @@ public class EventService {
         event.setConfirmedRequests(0L);
         event.setState(PENDING);
         event.setViews(0L);
-        event.setRequestModeration(true);
+
+        event.setPaid(eventNewDto.getPaid() != null ? eventNewDto.getPaid() : false);
+        event.setParticipantLimit(eventNewDto.getParticipantLimit() != null ? event.getParticipantLimit() : 0L);
+        event.setRequestModeration(eventNewDto.getRequestModeration() != null ? event.getRequestModeration() : true);
+
         return event;
     }
 
@@ -255,17 +295,32 @@ public class EventService {
 
             validateBeforeDate(oldEvent.getEventDate(), 1);
 
-            if ((oldEvent.getState().equals(PENDING)) &&
-                    ((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(PUBLISH_EVENT)) {
-                oldEvent.setState(PUBLISHED);
-                oldEvent.setPublishedOn(LocalDateTime.now());
-            } else if ((!oldEvent.getState().equals(PUBLISHED)) &&
-                    ((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(REJECT_EVENT)) {
-                oldEvent.setState(CANCELED);
-            } else {
-                throw new IllegalStateException("Wrong state of event: " +
-                        oldEvent.getState());
+            if (((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction() != null) {
+
+                if (((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(PUBLISH_EVENT)
+                        && !oldEvent.getState().equals(PENDING)) {
+                    throw new IllegalStateException("Wrong state of event: " +
+                            oldEvent.getState());
+                }
+
+                if ((((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(REJECT_EVENT) ||
+                        ((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(PUBLISH_EVENT))
+                        && oldEvent.getState().equals(PUBLISHED)) {
+                    throw new IllegalStateException("Wrong state of event: " +
+                            oldEvent.getState());
+                }
+
+                switch (((EventAdminUpdateRequestDto) eventUpdateRequestDto).getStateAction()) {
+                    case PUBLISH_EVENT:
+                        oldEvent.setState(PUBLISHED);
+                        oldEvent.setPublishedOn(LocalDateTime.now());
+                        break;
+                    case REJECT_EVENT:
+                        oldEvent.setState(CANCELED);
+                        break;
+                }
             }
+
         } else if (eventUpdateRequestDto instanceof EventUserUpdateRequestDto) {
             eventMapper.updateEvent(oldEvent, (EventUserUpdateRequestDto) eventUpdateRequestDto);
             User user = userService.getUserById(userId);
@@ -276,15 +331,21 @@ public class EventService {
                 throw new IllegalStateException("You don't have event with id " + eventId);
             }
 
-            if (!oldEvent.getRequestModeration() && !oldEvent.getState().equals(CANCELED)) {
-                throw new IllegalStateException("You don't have event with id " + eventId);
+            if (oldEvent.getState().equals(PUBLISHED) ) {
+                throw new IllegalStateException("Wrong state of event: " +
+                        oldEvent.getState());
             }
 
-            if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(SEND_TO_REVIEW)) {
-                oldEvent.setState(PENDING);
-                oldEvent.setPublishedOn(LocalDateTime.now());
-            } else if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction().equals(CANCEL_REVIEW)) {
-                oldEvent.setState(CANCELED);
+            if (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction() != null) {
+                switch (((EventUserUpdateRequestDto) eventUpdateRequestDto).getStateAction()) {
+                    case SEND_TO_REVIEW:
+                        oldEvent.setState(PENDING);
+                        oldEvent.setPublishedOn(LocalDateTime.now());
+                        break;
+                    case CANCEL_REVIEW:
+                        oldEvent.setState(CANCELED);
+                        break;
+                }
             }
         }
 
