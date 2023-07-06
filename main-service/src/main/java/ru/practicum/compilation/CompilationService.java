@@ -15,7 +15,6 @@ import ru.practicum.event.EventRepository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -26,10 +25,8 @@ public class CompilationService {
     private final CompilationMapper compilationMapper;
 
     public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
-        List<CompilationDto> result = getCompilationsByParams(pinned, getPage(from, size))
-                .stream()
-                .map(compilationMapper::toCompilationDto)
-                .collect(Collectors.toList());
+        List<CompilationDto> result = compilationMapper
+                .toCompilationDto(getCompilationsByParams(pinned, getPage(from, size)));
 
         log.info("Found {} compilation(s).", result.size());
         return result;

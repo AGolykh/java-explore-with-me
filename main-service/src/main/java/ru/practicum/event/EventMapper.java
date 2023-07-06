@@ -11,11 +11,13 @@ import ru.practicum.event.model.Event;
 import ru.practicum.location.LocationMapper;
 import ru.practicum.user.UserMapper;
 
+import java.util.List;
+
 @Component
 @Mapper(componentModel = "spring",
         uses = {CategoryMapper.class, UserMapper.class, LocationMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface EventMapper  {
+public interface EventMapper {
     Event toEvent(Long id);
 
     @Mapping(target = "state", ignore = true)
@@ -26,6 +28,8 @@ public interface EventMapper  {
     EventShortDto toEventShortDto(Event event);
 
     EventFullDto toEventFullDto(Event event);
+
+    List<EventFullDto> toEventFullDto(List<Event> event);
 
     @Mapping(target = "state", ignore = true)
     @Mapping(target = "location", ignore = true)

@@ -1,12 +1,13 @@
-package ru.practicum.event.model;
+package ru.practicum.event.dto;
 
 import lombok.Data;
+import ru.practicum.event.model.State;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
-public class EventSearchParams {
+public class EventSearchParamsAdminDto {
     private Set<Long> users;
     private Set<State> states;
     private Set<Long> categories;
@@ -15,13 +16,13 @@ public class EventSearchParams {
     private Integer from;
     private Integer size;
 
-    public EventSearchParams(Set<Long> users,
-                             Set<State> states,
-                             Set<Long> categories,
-                             LocalDateTime rangeStart,
-                             LocalDateTime rangeEnd,
-                             Integer from,
-                             Integer size) {
+    public EventSearchParamsAdminDto(Set<Long> users,
+                                     Set<State> states,
+                                     Set<Long> categories,
+                                     LocalDateTime rangeStart,
+                                     LocalDateTime rangeEnd,
+                                     Integer from,
+                                     Integer size) {
         this.users = users;
         this.states = states;
         this.categories = categories;

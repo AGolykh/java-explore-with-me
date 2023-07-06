@@ -1,6 +1,8 @@
 package ru.practicum.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -16,5 +18,6 @@ public class User {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 }

@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.category.Category;
+import ru.practicum.event.dto.EventSearchParamsPublicDto;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventSearchPublicParams;
 import ru.practicum.event.model.State;
 
 import java.time.LocalDateTime;
@@ -52,12 +52,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                    @Param("rangeStart") LocalDateTime rangeStart,
                                    @Param("rangeEnd") LocalDateTime rangeEnd,
                                    @Param("onlyAvailable") Boolean onlyAvailable,
-                                   @Param("sortType") EventSearchPublicParams.SortType sort,
+                                   @Param("sortType") EventSearchParamsPublicDto.SortType sort,
                                    Pageable pageable);
 
-    List<Event> findAllByInitiator_Id(Long userId, Pageable pageable);
+    List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
-    Optional<Event> findByInitiator_IdAndId(Long userId, Long eventId);
+    Optional<Event> findByInitiatorIdAndId(Long userId, Long eventId);
 
     boolean existsByCategory(Category category);
 

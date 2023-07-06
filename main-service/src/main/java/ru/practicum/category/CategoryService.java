@@ -12,7 +12,6 @@ import ru.practicum.event.EventRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,10 +22,10 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
 
     public List<CategoryDto> getAll(Integer from, Integer size) {
-        List<CategoryDto> result = categoryRepository.findAll(getPage(from, size))
-                .stream()
-                .map(categoryMapper::toCategoryDto)
-                .collect(Collectors.toList());
+
+        List<CategoryDto> result = categoryMapper
+                .toCategoryDto(categoryRepository.findAll(getPage(from, size)).toList());
+
 
         log.info("Found {} category(ies).", result.size());
         return result;
@@ -47,8 +46,6 @@ public class CategoryService {
         CategoryDto result = Optional.of(categoryRepository.save(categoryMapper.toCategory(categoryNewDto)))
                 .map(categoryMapper::toCategoryDto)
                 .orElseThrow();
-
-
 
         log.info("Category {} {} created.", result.getId(), result.getName());
         return result;

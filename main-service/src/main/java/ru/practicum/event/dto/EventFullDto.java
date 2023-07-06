@@ -1,7 +1,9 @@
 package ru.practicum.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.model.State;
 import ru.practicum.location.LocationDto;

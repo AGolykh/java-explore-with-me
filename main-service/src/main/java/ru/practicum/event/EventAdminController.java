@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventAdminUpdateRequestDto;
 import ru.practicum.event.dto.EventFullDto;
-import ru.practicum.event.model.EventSearchParams;
+import ru.practicum.event.dto.EventSearchParamsAdminDto;
 import ru.practicum.event.model.State;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,17 +37,23 @@ public class EventAdminController {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr());
-        return eventService.getAll(new EventSearchParams(users, states, categories, rangeStart, rangeEnd, from, size),
+        return eventService.getAllByParams(new EventSearchParamsAdminDto(users,
+                        states,
+                        categories,
+                        rangeStart,
+                        rangeEnd,
+                        from,
+                        size),
                 httpServletRequest);
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto update(@PathVariable Long eventId,
-                               @RequestBody @Valid EventAdminUpdateRequestDto eventAdminUpdateRequestDto,
-                               HttpServletRequest httpServletRequest) {
+    public EventFullDto updateAdmin(@PathVariable Long eventId,
+                                    @RequestBody @Valid EventAdminUpdateRequestDto eventAdminUpdateRequestDto,
+                                    HttpServletRequest httpServletRequest) {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr());
-        return eventService.update(eventId, eventAdminUpdateRequestDto);
+        return eventService.updateByAdminRequest(eventId, eventAdminUpdateRequestDto);
     }
 }

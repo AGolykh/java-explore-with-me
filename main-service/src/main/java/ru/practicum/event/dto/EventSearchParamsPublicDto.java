@@ -1,4 +1,4 @@
-package ru.practicum.event.model;
+package ru.practicum.event.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class EventSearchPublicParams {
+public class EventSearchParamsPublicDto {
     private String text;
     private Set<Long> categories;
     private Boolean paid;

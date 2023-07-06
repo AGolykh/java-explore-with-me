@@ -14,7 +14,6 @@ import ru.practicum.user.UserService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static ru.practicum.event.model.State.PUBLISHED;
 import static ru.practicum.request.Status.CANCELED;
@@ -33,10 +32,9 @@ public class RequestService {
 
     public List<RequestDto> getByUserId(Long userId) {
         User user = userService.getUserById(userId);
-        List<RequestDto> result = requestRepository.findAllByRequester_Id(user.getId())
-                .stream()
-                .map(requestMapper::toRequestDto)
-                .collect(Collectors.toList());
+
+        List<RequestDto> result = requestMapper
+                .toRequestDto(requestRepository.findAllByRequesterId(user.getId()));
 
         log.info("Found {} event(s).", result.size());
         return result;
@@ -52,7 +50,7 @@ public class RequestService {
                     .format("User %d must not be equal to initiator", userId));
         }
 
-        if (requestRepository.existsByEvent_IdAndRequester_Id(event.getId(), user.getId())) {
+        if (requestRepository.existsByEventIdAndRequesterId(event.getId(), user.getId())) {
             throw new IllegalStateException(String
                     .format("Request by user %d already exists in event %d ", userId, eventId));
         }
@@ -86,7 +84,7 @@ public class RequestService {
 
     @Transactional
     public RequestDto update(Long userId, Long requestId) {
-        Request request = requestRepository.findByIdAndRequester_Id(requestId, userId)
+        Request request = requestRepository.findByIdAndRequesterId(requestId, userId)
                 .orElseThrow(() -> new NullPointerException(String.format("Request with id=%d " +
                         "and requesterId=%d was not found", requestId, userId)));
         request.setStatus(CANCELED);

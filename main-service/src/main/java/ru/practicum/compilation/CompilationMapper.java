@@ -13,12 +13,16 @@ import ru.practicum.event.EventMapper;
 import ru.practicum.location.LocationMapper;
 import ru.practicum.user.UserMapper;
 
+import java.util.List;
+
 @Component
 @Mapper(componentModel = "spring",
         uses = {UserMapper.class, CategoryMapper.class, EventMapper.class, LocationMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CompilationMapper {
     CompilationDto toCompilationDto(Compilation compilation);
+
+    List<CompilationDto> toCompilationDto(List<Compilation> compilations);
 
     @Mapping(target = "events", ignore = true)
     Compilation toCompilation(CompilationNewDto compilationNewDto);

@@ -32,7 +32,7 @@ public class EventPrivateController {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr());
-        return eventService.getAll(userId, from, size, httpServletRequest);
+        return eventService.getAllByUserId(userId, from, size, httpServletRequest);
     }
 
     @PostMapping
@@ -48,12 +48,12 @@ public class EventPrivateController {
 
     @GetMapping("/{eventId}")
     public EventFullDto getByUserEventId(@PathVariable Long userId,
-                            @PathVariable Long eventId,
+                                         @PathVariable Long eventId,
                                          HttpServletRequest httpServletRequest) {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr());
-        return eventService.getEventByUserEventId(userId, eventId, httpServletRequest);
+        return eventService.getEventByUserIdAndEventId(userId, eventId, httpServletRequest);
     }
 
     @PatchMapping("/{eventId}")
@@ -63,17 +63,17 @@ public class EventPrivateController {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr());
-        return eventService.update(userId, eventId, eventUserUpdateRequestDto);
+        return eventService.updateByUserRequest(userId, eventId, eventUserUpdateRequestDto);
     }
 
     @GetMapping("/{eventId}/requests")
     public List<RequestDto> getRequestsByUserEventId(@PathVariable Long userId,
-                                        @PathVariable Long eventId,
+                                                     @PathVariable Long eventId,
                                                      HttpServletRequest httpServletRequest) {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr());
-        return eventService.getRequestsByUserEventId(userId, eventId);
+        return eventService.getRequestsByUserIdAndEventId(userId, eventId);
     }
 
     @PatchMapping("/{eventId}/requests")

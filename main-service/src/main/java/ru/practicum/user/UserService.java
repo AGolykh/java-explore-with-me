@@ -11,7 +11,6 @@ import ru.practicum.user.dto.UserDto;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -21,10 +20,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     public List<UserDto> getAll(List<Long> ids, Integer from, Integer size) {
-        List<UserDto> result = getUsersByParams(ids, getPage(from, size))
-                .stream()
-                .map(userMapper::toUserDto)
-                .collect(Collectors.toList());
+        List<UserDto> result = userMapper.toUserDto(getUsersByParams(ids, getPage(from, size)));
 
         log.info("Found {} user(s).", result.size());
         return result;

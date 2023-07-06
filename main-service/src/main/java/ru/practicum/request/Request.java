@@ -1,6 +1,8 @@
 package ru.practicum.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.User;
 

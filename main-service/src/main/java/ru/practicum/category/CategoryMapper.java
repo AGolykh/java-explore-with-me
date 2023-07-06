@@ -1,13 +1,13 @@
 package ru.practicum.category;
 
 import org.mapstruct.Mapper;
-
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CategoryNewDto;
+
+import java.util.List;
 
 @Component
 @Mapper(componentModel = "spring",
@@ -15,12 +15,9 @@ import ru.practicum.category.dto.CategoryNewDto;
 public interface CategoryMapper {
     CategoryDto toCategoryDto(Category category);
 
-    Category toCategory(Long id);
-
-    Category toCategory(CategoryDto categoryDto);
+    List<CategoryDto> toCategoryDto(List<Category> categories);
 
     Category toCategory(CategoryNewDto categoryNewDto);
 
-    @Mapping(target = "id", ignore = true)
     void updateCategory(@MappingTarget Category category, CategoryNewDto categoryNewDto);
 }

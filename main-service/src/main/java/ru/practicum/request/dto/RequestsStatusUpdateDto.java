@@ -1,6 +1,8 @@
 package ru.practicum.request.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.request.Status;
 
 import java.util.List;

@@ -13,7 +13,6 @@ import ru.practicum.stats.model.ViewStats;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,10 +36,8 @@ public class StatsService {
 
     public List<ViewStatsDto> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         validateDate(start, end);
-        List<ViewStatsDto> result = getViewStatsByParams(start, end, uris, unique)
-                .stream()
-                .map(viewStatsMapper::toViewStatsDto)
-                .collect(Collectors.toList());
+        List<ViewStatsDto> result = viewStatsMapper
+                .toViewStatsDto(getViewStatsByParams(start, end, uris, unique));
 
         log.info("Found {} endpoint hits.", result.size());
         return result;
