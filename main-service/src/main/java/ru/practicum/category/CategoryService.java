@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CategoryNewDto;
 import ru.practicum.event.EventRepository;
+import ru.practicum.exception.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +23,8 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
 
     public List<CategoryDto> getAll(Integer from, Integer size) {
-
         List<CategoryDto> result = categoryMapper
                 .toCategoryDto(categoryRepository.findAll(getPage(from, size)).toList());
-
 
         log.info("Found {} category(ies).", result.size());
         return result;
@@ -35,7 +34,7 @@ public class CategoryService {
         CategoryDto result = categoryRepository
                 .findById(catId)
                 .map(categoryMapper::toCategoryDto)
-                .orElseThrow(() -> new NullPointerException(String.format("Category %d is not found.", catId)));
+                .orElseThrow(() -> new NotFoundException("Category", catId));
 
         log.info("Category {} is found.", result.getId());
         return result;
@@ -77,7 +76,7 @@ public class CategoryService {
     public Category getCategoryById(Long catId) {
         Category result = categoryRepository
                 .findById(catId)
-                .orElseThrow(() -> new NullPointerException(String.format("Category %d is not found.", catId)));
+                .orElseThrow(() -> new NotFoundException("Category", catId));
         log.info("Category {} is found.", result.getId());
         return result;
     }

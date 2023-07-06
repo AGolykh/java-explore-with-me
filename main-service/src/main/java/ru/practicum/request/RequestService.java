@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.EventRepository;
 import ru.practicum.event.EventService;
 import ru.practicum.event.model.Event;
+import ru.practicum.exception.NotFoundException;
 import ru.practicum.request.dto.RequestDto;
 import ru.practicum.user.User;
 import ru.practicum.user.UserService;
@@ -84,9 +85,9 @@ public class RequestService {
 
     @Transactional
     public RequestDto update(Long userId, Long requestId) {
-        Request request = requestRepository.findByIdAndRequesterId(requestId, userId)
-                .orElseThrow(() -> new NullPointerException(String.format("Request with id=%d " +
-                        "and requesterId=%d was not found", requestId, userId)));
+        Request request = requestRepository
+                .findByIdAndRequesterId(requestId, userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Request %d by User", requestId), userId));
         request.setStatus(CANCELED);
         RequestDto result = Optional.of(requestRepository.save(request))
                 .map(requestMapper::toRequestDto)

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.UserDto;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class UserService {
     public User getUserById(Long userId) {
         User result = userRepository
                 .findById(userId)
-                .orElseThrow(() -> new NullPointerException(String.format("User %d is not found.", userId)));
+                .orElseThrow(() -> new NotFoundException("User", userId));
 
         log.info("User {} is found.", result.getId());
         return result;

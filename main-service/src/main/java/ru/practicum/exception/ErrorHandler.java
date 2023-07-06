@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.DateTimeException;
-
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
@@ -52,15 +50,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handle(final NullPointerException e) {
+    public ApiError handle(final NotFoundException e) {
         return makeApiError(e, "NOT_FOUND");
-    }
-
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handle(final DateTimeException e) {
-        return makeApiError(e, "BAD_REQUEST");
     }
 
     private ApiError makeApiError(Throwable e, String status) {

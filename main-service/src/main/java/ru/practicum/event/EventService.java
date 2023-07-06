@@ -10,6 +10,7 @@ import ru.practicum.category.Category;
 import ru.practicum.category.CategoryService;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Event;
+import ru.practicum.exception.NotFoundException;
 import ru.practicum.location.Location;
 import ru.practicum.location.LocationMapper;
 import ru.practicum.location.LocationRepository;
@@ -25,7 +26,6 @@ import ru.practicum.user.User;
 import ru.practicum.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -282,7 +282,7 @@ public class EventService {
     public EventFullDto getById(Long eventId, HttpServletRequest httpServletRequest) {
         Event event = getEventById(eventId);
         if (!event.getState().equals(PUBLISHED)) {
-            throw new NullPointerException();
+            throw new NotFoundException("Event", eventId);
         }
 
         addViews(List.of(event));
@@ -297,7 +297,7 @@ public class EventService {
     public Event getEventById(Long eventId) {
         Event result = eventRepository
                 .findById(eventId)
-                .orElseThrow(() -> new NullPointerException(String.format("Event %d is not found.", eventId)));
+                .orElseThrow(() -> new NotFoundException("Event", eventId));
         log.info("Event {} is found.", result.getId());
         return result;
     }
@@ -356,7 +356,7 @@ public class EventService {
 
     private void validateDate(LocalDateTime start, LocalDateTime end) {
         if (!(start.isBefore(end) && !start.equals(end))) {
-            throw new DateTimeException("StartDate must be before EndDate");
+            throw new IllegalArgumentException("StartDate must be before EndDate");
         }
     }
 

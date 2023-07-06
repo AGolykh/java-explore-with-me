@@ -11,6 +11,7 @@ import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CompilationNewDto;
 import ru.practicum.compilation.dto.CompilationUpdateDto;
 import ru.practicum.event.EventRepository;
+import ru.practicum.exception.NotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +37,7 @@ public class CompilationService {
         CompilationDto result = compilationRepository
                 .findById(compId)
                 .map(compilationMapper::toCompilationDto)
-                .orElseThrow(() -> new NullPointerException(String.format("Compilation %d is not found.", compId)));
+                .orElseThrow(() -> new NotFoundException("Compilation", compId));
 
         log.info("Compilation {} is found.", result.getId());
         return result;
@@ -84,7 +85,7 @@ public class CompilationService {
     public Compilation getCompilationById(Long compId) {
         Compilation result = compilationRepository
                 .findById(compId)
-                .orElseThrow(() -> new NullPointerException(String.format("Compilation %d is not found.", compId)));
+                .orElseThrow(() -> new NotFoundException("Compilation", compId));
         log.info("Compilation {} is found.", result.getId());
         return result;
     }
