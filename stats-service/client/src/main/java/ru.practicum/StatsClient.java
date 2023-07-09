@@ -1,62 +1,47 @@
 package ru.practicum;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
-@Slf4j
 @Service
 public class StatsClient {
-    private final String serverUrl;
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public StatsClient(@Value("${stats-server.url}") String serverUrl) {
-        this.serverUrl = serverUrl;
-        this.restTemplate = new RestTemplate();
+    public StatsClient(@Value("${stats-service.url}") String host) {
+        this.webClient = WebClient.create(host);
     }
 
-    public void post(EndpointHitDto endpointHitDto) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<EndpointHitDto> requestEntity = new HttpEntity<>(endpointHitDto, headers);
-        restTemplate.exchange(serverUrl + "/hit", HttpMethod.POST, requestEntity, EndpointHitDto.class);
+    public EndpointHitDto post(EndpointHitDto endpointHitDto) {
+        return webClient.post()
+                .uri("/hit")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .bodyValue(endpointHitDto)
+                .retrieve()
+                .bodyToMono(EndpointHitDto.class)
+                .block();
     }
 
-    public List<ViewStatsDto> get(String start, String end, List<String> uris, Boolean unique) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("start", start);
-        params.put("end", end);
-        params.put("uris", uris);
-        params.put("unique", unique);
-
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                serverUrl + "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
-                String.class, params);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            return Arrays.asList(objectMapper.readValue(response.getBody(), ViewStatsDto[].class));
-        } catch (JsonProcessingException exception) {
-            throw new StatsException(String.format("Json processing error: %s", exception.getMessage()));
-        }
-    }
-
-    public static class StatsException extends RuntimeException {
-        public StatsException(String message) {
-            super(message);
-        }
+    public List<ViewStatsDto> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/stats")
+                        .queryParam("start", start.format(FORMATTER))
+                        .queryParam("end", end.format(FORMATTER))
+                        .queryParam("uris", uris)
+                        .queryParam("unique", unique)
+                        .build())
+                .retrieve()
+                .bodyToFlux(ViewStatsDto.class)
+                .collectList()
+                .block();
     }
 }
