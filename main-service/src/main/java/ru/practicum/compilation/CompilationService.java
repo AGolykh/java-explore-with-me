@@ -70,7 +70,7 @@ public class CompilationService {
                 .map(compilationMapper::toCompilationDto)
                 .orElseThrow();
 
-        log.info("Compilation category: {}", result.getTitle());
+        log.info("Compilation {} updated", result.getId());
         return result;
     }
 
