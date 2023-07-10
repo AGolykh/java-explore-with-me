@@ -10,7 +10,6 @@ import ru.practicum.comment.dto.CommentDto;
 import ru.practicum.comment.dto.CommentSearchParamsDto;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +24,7 @@ public class CommentAdminController {
 
     @DeleteMapping("{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Positive @PathVariable Long commentId,
+    public void delete(@PathVariable Long commentId,
                        HttpServletRequest httpServletRequest) {
         log.info("Получен {} запрос к {} от {} ", httpServletRequest.getMethod(),
                 httpServletRequest.getRequestURI(),

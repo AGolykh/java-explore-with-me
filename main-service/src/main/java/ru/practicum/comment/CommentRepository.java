@@ -15,14 +15,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByEventId(Long eventId, Pageable pageable);
 
     @Query(" select c from Comment c " +
-            "where lower(c.text) like lower(concat('%', :text, '%')) or :text = null " +
-            "and c.author.id in :users or :users = null " +
-            "and c.event.id in :events or :events = null " +
-            "and (cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
+            "where (lower(c.text) like lower(concat('%', :text, '%')) or :text = null) " +
+            "and (c.author.id in :users or :users = null) " +
+            "and (c.event.id in :events or :events = null) " +
+            "and ((cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
             "and c.created between cast(:rangeStart as date) and cast(:rangeEnd as date) ) " +
             "or (cast(:rangeStart as date) = null and c.created < cast(:rangeEnd as date) )" +
             "or (cast(:rangeEnd as date) = null and c.created > cast(:rangeStart as date) )" +
-            "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null)")
+            "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null))")
     List<Comment> findCommentsByParams(@Param("text") String text,
                                      @Param("users") Set<Long> users,
                                      @Param("events") Set<Long> events,

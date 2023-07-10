@@ -1,0 +1,2704 @@
+{
+	"info": {
+		"_postman_id": "b6c4f394-a9c6-45ca-a316-e669c32cbf0a",
+		"name": "Test Explore With Me - Feature comments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25683112"
+	},
+	"item": [
+		{
+			"name": "Validation",
+			"item": [
+				{
+					"name": "Создание комментария несущесвующим пользователем",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статус 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Просто коммент от невалидного юзера к эвенту 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/-1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"-1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание комментария к несуществующему событию",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Просто коммент от юзера 1 к невалидному эвенту\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/-1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание комментария с текстом null",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание комментария с текстом  blank",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"\"  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание комментария с текстом > 500",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание комментария для валидации",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;  \r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовый комментарий пользователя 1 к событию 1\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 1 к событию 1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"1\"').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовый комментарий пользователя 1 к событию 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление комментария от несуществующего пользователя",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовое обновление комментария 1 пользователя 888\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/-1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"-1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление несуществующего комментария",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовое обновление комментария 888 пользователя 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/-1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев несуществующего пользователя",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/888/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"888",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев несуществующего события",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/comments/888",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comments",
+								"888"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление несуществующего комментария",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/1/comments/-1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"comments",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаления комментария несуществующим пользователем",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/-1/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"-1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление несуществующего комментария по запросу от администратора",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments/-1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "409 Conflict",
+			"item": [
+				{
+					"name": "Создание комментария для проверки конфликтов",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;  \r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовый комментарий пользователя 1 к событию 1\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 2 к событию 2\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"2\"').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовый комментарий пользователя 2 к событию 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/2/comments/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"comments",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление комментария по запросу от невладельца",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(409);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовое обновление комментария 1 пользователя 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/2/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление комментария по запросу от невладельца",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(409);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/2/comments/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Добавление комментария от юзера 3 к событию 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовый комментарий 3 пользователя 3 к событию 3\"')\r",
+									"    .to.eql(\"Тестовый комментарий 3 пользователя 3 к событию 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовый комментарий 3 пользователя 3 к событию 3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/3/comments/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"comments",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление комментария от юзера 3 к событию 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовый комментарий 4 пользователя 3 к событию 4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/3/comments/4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"comments",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление комментария от юзера 4 к событию 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 5').to.eql(5);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовый комментарий 5 пользователя 4 к событию 3\"')\r",
+									"    .to.eql(\"Тестовый комментарий 5 пользователя 4 к событию 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовый комментарий 5 пользователя 4 к событию 3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/4/comments/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"4",
+								"comments",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление комментария от юзера 4 к событию 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовый комментарий 6 пользователя 4 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 6 пользователя 4 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовый комментарий 6 пользователя 4 к событию 4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/4/comments/4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"4",
+								"comments",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление комментария 3 от пользоватея 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test comment 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('text');\r",
+									"    pm.expect(jsonData.text, '\"text\" must be \"Тестовое обновление комментария 3 пользователя 3\"')\r",
+									"    .to.eql(\"Тестовое обновление комментария 3 пользователя 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('author');\r",
+									"    pm.expect(jsonData.author).to.have.property('id');\r",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('eventId');\r",
+									"    pm.expect(jsonData.eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Тестовое обновление комментария 3 пользователя 3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/3/comments/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"comments",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев пользователя 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и список комментариев в формате json\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(body).is.an('array');\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовое обновление комментария 3 пользователя 3\"')\r",
+									"    .to.eql(\"Тестовое обновление комментария 3 пользователя 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/3/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев пользователя 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и список комментариев в формате json\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(body).is.an('array');\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 5').to.eql(5);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий 5 пользователя 4 к событию 3\"')\r",
+									"    .to.eql(\"Тестовый комментарий 5 пользователя 4 к событию 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовый комментарий 6 пользователя 4 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 6 пользователя 4 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/4/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"4",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев к событию 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и список комментариев в формате json\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(body).is.an('array');\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовое обновление комментария 3 пользователя 3\"')\r",
+									"    .to.eql(\"Тестовое обновление комментария 3 пользователя 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 5').to.eql(5);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовый комментарий 5 пользователя 4 к событию 3\"')\r",
+									"    .to.eql(\"Тестовый комментарий 5 пользователя 4 к событию 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/comments/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comments",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев к событию 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и список комментариев в формате json\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(body).is.an('array');\r",
+									"}); \r",
+									"\r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовый комментарий 6 пользователя 4 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 6 пользователя 4 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/comments/4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comments",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев по запросу администратора без параметров",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий пользователя 1 к событию 1\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 1 к событию 1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"1\"').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовый комментарий пользователя 2 к событию 2\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 2 к событию 2\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"2\"').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('id');\r",
+									"    pm.expect(jsonData[2].id, '\"id\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('text');\r",
+									"    pm.expect(jsonData[2].text, '\"text\" must be \"Тестовое обновление комментария 3 пользователя 3\"')\r",
+									"    .to.eql(\"Тестовое обновление комментария 3 пользователя 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('author');\r",
+									"    pm.expect(jsonData[2].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[2].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[2].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[3] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[3]).to.have.property('id');\r",
+									"    pm.expect(jsonData[3].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[3] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[3]).to.have.property('text');\r",
+									"    pm.expect(jsonData[3].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[3] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[3]).to.have.property('author');\r",
+									"    pm.expect(jsonData[3].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[3].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[3] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[3]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[3].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[4] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[4]).to.have.property('id');\r",
+									"    pm.expect(jsonData[4].id, '\"id\" must be 5').to.eql(5);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[4] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[4]).to.have.property('text');\r",
+									"    pm.expect(jsonData[4].text, '\"text\" must be \"Тестовый комментарий 5 пользователя 4 к событию 3\"')\r",
+									"    .to.eql(\"Тестовый комментарий 5 пользователя 4 к событию 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[4] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[4]).to.have.property('author');\r",
+									"    pm.expect(jsonData[4].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[4].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[4] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[4]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[4].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[5] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[5]).to.have.property('id');\r",
+									"    pm.expect(jsonData[5].id, '\"id\" must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[5] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[5]).to.have.property('text');\r",
+									"    pm.expect(jsonData[5].text, '\"text\" must be \"Тестовый комментарий 6 пользователя 4 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 6 пользователя 4 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[5] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[5]).to.have.property('author');\r",
+									"    pm.expect(jsonData[5].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[5].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[5] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[5]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[5].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        const user = await api.addUser(rnd.getUser());\r",
+									"        const category = await api.addCategory(rnd.getCategory());\r",
+									"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+									"        event = await api.publishEvent(event.id);\r",
+									"        pm.request.removeQueryParams(['text', 'categories', 'paid']);\r",
+									"        pm.request.addQueryParams([`text=` + event.annotation, 'categories=' + category.id, 'paid=' + event.paid]);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            // выполняем наш скрипт\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "0",
+									"description": "текст для поиска в комментарии",
+									"disabled": true
+								},
+								{
+									"key": "users",
+									"value": "0",
+									"description": "список идентификаторов юзеров по которым будет вестись поиск",
+									"disabled": true
+								},
+								{
+									"key": "events",
+									"value": "0",
+									"description": "список идентификаторов эвентов по которым будет вестись поиск",
+									"disabled": true
+								},
+								{
+									"key": "rangeStart",
+									"value": "2022-01-06%2013%3A30%3A38",
+									"description": "дата и время не раньше которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "rangeEnd",
+									"value": "2097-09-06%2013%3A30%3A38",
+									"description": "дата и время не позже которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "0",
+									"description": "количество комментов, которые нужно пропустить для формирования текущего набора",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "1000",
+									"description": "количество комментов в наборе",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Обратите внимание: \n- это публичный эндпоинт, соответственно в выдаче должны быть только опубликованные события\n- текстовый поиск (по аннотации и подробному описанию) должен быть без учета регистра букв\n- если в запросе не указан диапазон дат [rangeStart-rangeEnd], то нужно выгружать события, которые произойдут позже текущей даты и времени\n- информация о каждом событии должна включать в себя количество просмотров и количество уже одобренных заявок на участие\n- информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики"
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев по запросу администратора с параметром поиска по юзерам 1,3",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        const user = await api.addUser(rnd.getUser());\r",
+									"        const category = await api.addCategory(rnd.getCategory());\r",
+									"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+									"        event = await api.publishEvent(event.id);\r",
+									"        pm.request.removeQueryParams(['text', 'categories', 'paid']);\r",
+									"        pm.request.addQueryParams([`text=` + event.annotation, 'categories=' + category.id, 'paid=' + event.paid]);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            // выполняем наш скрипт\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий пользователя 1 к событию 1\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 1 к событию 1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"1\"').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовое обновление комментария 3 пользователя 3\"')\r",
+									"    .to.eql(\"Тестовое обновление комментария 3 пользователя 3\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('id');\r",
+									"    pm.expect(jsonData[2].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('text');\r",
+									"    pm.expect(jsonData[2].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('author');\r",
+									"    pm.expect(jsonData[2].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[2].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[2].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments?users=1,3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "пользователя 2 к событию 2",
+									"description": "текст для поиска в комментарии",
+									"disabled": true
+								},
+								{
+									"key": "users",
+									"value": "1,3",
+									"description": "список идентификаторов юзеров по которым будет вестись поиск"
+								},
+								{
+									"key": "events",
+									"value": "3",
+									"description": "список идентификаторов эвентов по которым будет вестись поиск",
+									"disabled": true
+								},
+								{
+									"key": "rangeStart",
+									"value": "2022-01-06%2013%3A30%3A38",
+									"description": "дата и время не раньше которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "rangeEnd",
+									"value": "2097-09-06%2013%3A30%3A38",
+									"description": "дата и время не позже которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "0",
+									"description": "количество комментов, которые нужно пропустить для формирования текущего набора",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "1000",
+									"description": "количество комментов в наборе",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Обратите внимание: \n- это публичный эндпоинт, соответственно в выдаче должны быть только опубликованные события\n- текстовый поиск (по аннотации и подробному описанию) должен быть без учета регистра букв\n- если в запросе не указан диапазон дат [rangeStart-rangeEnd], то нужно выгружать события, которые произойдут позже текущей даты и времени\n- информация о каждом событии должна включать в себя количество просмотров и количество уже одобренных заявок на участие\n- информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики"
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев по запросу администратора с параметром поиска по эвентам 2,4",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        const user = await api.addUser(rnd.getUser());\r",
+									"        const category = await api.addCategory(rnd.getCategory());\r",
+									"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+									"        event = await api.publishEvent(event.id);\r",
+									"        pm.request.removeQueryParams(['text', 'categories', 'paid']);\r",
+									"        pm.request.addQueryParams([`text=` + event.annotation, 'categories=' + category.id, 'paid=' + event.paid]);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            // выполняем наш скрипт\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 3').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий пользователя 2 к событию 2\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 2 к событию 2\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"2\"').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('text');\r",
+									"    pm.expect(jsonData[1].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('author');\r",
+									"    pm.expect(jsonData[1].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[1].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[1]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[1].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('id');\r",
+									"    pm.expect(jsonData[2].id, '\"id\" must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('text');\r",
+									"    pm.expect(jsonData[2].text, '\"text\" must be \"Тестовый комментарий 6 пользователя 4 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 6 пользователя 4 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('author');\r",
+									"    pm.expect(jsonData[2].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[2].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[2] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[2]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[2].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments?events=2,4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "пользователя 2 к событию 2",
+									"description": "текст для поиска в комментарии",
+									"disabled": true
+								},
+								{
+									"key": "users",
+									"value": "1,3",
+									"description": "список идентификаторов юзеров по которым будет вестись поиск",
+									"disabled": true
+								},
+								{
+									"key": "events",
+									"value": "2,4",
+									"description": "список идентификаторов эвентов по которым будет вестись поиск"
+								},
+								{
+									"key": "rangeStart",
+									"value": "2022-01-06%2013%3A30%3A38",
+									"description": "дата и время не раньше которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "rangeEnd",
+									"value": "2097-09-06%2013%3A30%3A38",
+									"description": "дата и время не позже которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "0",
+									"description": "количество комментов, которые нужно пропустить для формирования текущего набора",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "1000",
+									"description": "количество комментов в наборе",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Обратите внимание: \n- это публичный эндпоинт, соответственно в выдаче должны быть только опубликованные события\n- текстовый поиск (по аннотации и подробному описанию) должен быть без учета регистра букв\n- если в запросе не указан диапазон дат [rangeStart-rangeEnd], то нужно выгружать события, которые произойдут позже текущей даты и времени\n- информация о каждом событии должна включать в себя количество просмотров и количество уже одобренных заявок на участие\n- информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики"
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев по запросу администратора с параметром поиска по тексту",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        const user = await api.addUser(rnd.getUser());\r",
+									"        const category = await api.addCategory(rnd.getCategory());\r",
+									"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+									"        event = await api.publishEvent(event.id);\r",
+									"        pm.request.removeQueryParams(['text', 'categories', 'paid']);\r",
+									"        pm.request.addQueryParams([`text=` + event.annotation, 'categories=' + category.id, 'paid=' + event.paid]);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            // выполняем наш скрипт\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий пользователя 2 к событию 2\"')\r",
+									"    .to.eql(\"Тестовый комментарий пользователя 2 к событию 2\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"2\"').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 2').to.eql(2);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments?text=пользователя 2 к событию 2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "пользователя 2 к событию 2",
+									"description": "текст для поиска в комментарии"
+								},
+								{
+									"key": "users",
+									"value": "1,3",
+									"description": "список идентификаторов юзеров по которым будет вестись поиск",
+									"disabled": true
+								},
+								{
+									"key": "events",
+									"value": "3",
+									"description": "список идентификаторов эвентов по которым будет вестись поиск",
+									"disabled": true
+								},
+								{
+									"key": "rangeStart",
+									"value": "2022-01-06%2013%3A30%3A38",
+									"description": "дата и время не раньше которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "rangeEnd",
+									"value": "2097-09-06%2013%3A30%3A38",
+									"description": "дата и время не позже которых должна быть дата создания комента",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "0",
+									"description": "количество комментов, которые нужно пропустить для формирования текущего набора",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "1000",
+									"description": "количество комментов в наборе",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Обратите внимание: \n- это публичный эндпоинт, соответственно в выдаче должны быть только опубликованные события\n- текстовый поиск (по аннотации и подробному описанию) должен быть без учета регистра букв\n- если в запросе не указан диапазон дат [rangeStart-rangeEnd], то нужно выгружать события, которые произойдут позже текущей даты и времени\n- информация о каждом событии должна включать в себя количество просмотров и количество уже одобренных заявок на участие\n- информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики"
+					},
+					"response": []
+				},
+				{
+					"name": "Получение комментариев по запросу администратора со всеми параметрами",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        const user = await api.addUser(rnd.getUser());\r",
+									"        const category = await api.addCategory(rnd.getCategory());\r",
+									"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+									"        event = await api.publishEvent(event.id);\r",
+									"        pm.request.removeQueryParams(['text', 'categories', 'paid']);\r",
+									"        pm.request.addQueryParams([`text=` + event.annotation, 'categories=' + category.id, 'paid=' + event.paid]);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            // выполняем наш скрипт\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments?text=комментарий&users=1,3&events=2,4&rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&from=0&size=1000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "комментарий",
+									"description": "текст для поиска в комментарии"
+								},
+								{
+									"key": "users",
+									"value": "1,3",
+									"description": "список идентификаторов юзеров по которым будет вестись поиск"
+								},
+								{
+									"key": "events",
+									"value": "2,4",
+									"description": "список идентификаторов эвентов по которым будет вестись поиск"
+								},
+								{
+									"key": "rangeStart",
+									"value": "2022-01-06%2013%3A30%3A38",
+									"description": "дата и время не раньше которых должна быть дата создания комента"
+								},
+								{
+									"key": "rangeEnd",
+									"value": "2097-09-06%2013%3A30%3A38",
+									"description": "дата и время не позже которых должна быть дата создания комента"
+								},
+								{
+									"key": "from",
+									"value": "0",
+									"description": "количество комментов, которые нужно пропустить для формирования текущего набора"
+								},
+								{
+									"key": "size",
+									"value": "1000",
+									"description": "количество комментов в наборе"
+								}
+							]
+						},
+						"description": "Обратите внимание: \n- это публичный эндпоинт, соответственно в выдаче должны быть только опубликованные события\n- текстовый поиск (по аннотации и подробному описанию) должен быть без учета регистра букв\n- если в запросе не указан диапазон дат [rangeStart-rangeEnd], то нужно выгружать события, которые произойдут позже текущей даты и времени\n- информация о каждом событии должна включать в себя количество просмотров и количество уже одобренных заявок на участие\n- информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики"
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление комментария 3 от пользователя 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(204);\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/3/comments/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"comments",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев пользователя 3 после удаления",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и список комментариев в формате json\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(body).is.an('array');\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 4').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий 4 пользователя 3 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 4 пользователя 3 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"3\"').to.eql(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[1] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/3/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление комментария 5 по запросу от администратора",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function() {\r",
+									"    pm.response.to.have.status(204);\r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/comments/5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"comments",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение списка комментариев пользователя 4 после удаления по запросу от администратора",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и список комментариев в формате json\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(body).is.an('array');\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Test list comment response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].id, '\"id\" must be 6').to.eql(6);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'text' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('text');\r",
+									"    pm.expect(jsonData[0].text, '\"text\" must be \"Тестовый комментарий 6 пользователя 4 к событию 4\"')\r",
+									"    .to.eql(\"Тестовый комментарий 6 пользователя 4 к событию 4\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'author.id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('author');\r",
+									"    pm.expect(jsonData[0].author).to.have.property('id');\r",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"4\"').to.eql(4);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test comment[0] 'eventId' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+									"    pm.expect(jsonData[0].eventId, '\"eventId\" must be 4').to.eql(4);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/4/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"4",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

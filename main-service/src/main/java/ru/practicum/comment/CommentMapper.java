@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    @Mapping(source = "author.name", target = "authorName")
     @Mapping(source = "event.id", target = "eventId")
     CommentDto toCommentDto(Comment comment);
 
@@ -18,8 +17,6 @@ public interface CommentMapper {
     @Mapping(source = "event.id", target = "eventId")
     List<CommentDto> toCommentDto(List<Comment> comments);
 
-    @Mapping(target = "author", ignore = true)
-    @Mapping(target = "event", ignore = true)
     Comment toComment(CommentNewDto commentNewDto);
 
     @Mapping(target = "author", ignore = true)
