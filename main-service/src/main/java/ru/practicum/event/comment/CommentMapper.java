@@ -1,10 +1,10 @@
-package ru.practicum.comment;
+package ru.practicum.event.comment;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import ru.practicum.comment.dto.CommentDto;
-import ru.practicum.comment.dto.CommentNewDto;
+import ru.practicum.event.comment.dto.CommentDto;
+import ru.practicum.event.comment.dto.CommentNewDto;
 
 import java.util.List;
 

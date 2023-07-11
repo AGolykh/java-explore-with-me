@@ -1,4 +1,4 @@
-package ru.practicum.comment;
+package ru.practicum.event.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,8 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.comment.dto.CommentDto;
-import ru.practicum.comment.dto.CommentSearchParamsDto;
+import ru.practicum.event.comment.dto.CommentDto;
+import ru.practicum.event.comment.dto.CommentSearchParamsDto;
 import ru.practicum.exception.ApiError;
 
 import javax.servlet.http.HttpServletRequest;

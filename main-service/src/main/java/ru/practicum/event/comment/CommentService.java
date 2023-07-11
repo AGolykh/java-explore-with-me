@@ -1,4 +1,4 @@
-package ru.practicum.comment;
+package ru.practicum.event.comment;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.comment.dto.CommentDto;
-import ru.practicum.comment.dto.CommentNewDto;
-import ru.practicum.comment.dto.CommentSearchParamsDto;
+import ru.practicum.event.comment.dto.CommentDto;
+import ru.practicum.event.comment.dto.CommentNewDto;
+import ru.practicum.event.comment.dto.CommentSearchParamsDto;
 import ru.practicum.event.EventService;
 import ru.practicum.event.model.Event;
 import ru.practicum.exception.NotFoundException;

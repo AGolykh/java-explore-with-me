@@ -1,4 +1,4 @@
-package ru.practicum.comment.dto;
+package ru.practicum.event.comment.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;

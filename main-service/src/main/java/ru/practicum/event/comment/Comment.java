@@ -1,4 +1,4 @@
-package ru.practicum.comment;
+package ru.practicum.event.comment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
