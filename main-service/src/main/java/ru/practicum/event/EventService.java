@@ -182,7 +182,7 @@ public class EventService {
         validateBeforeDate(oldEvent.getEventDate(), 2);
 
         if (!oldEvent.getInitiator().getId().equals(user.getId())) {
-            throw new IllegalStateException("You don't have event with id " + eventId);
+            throw new IllegalStateException("User don't have event with id " + eventId);
         }
 
         if (oldEvent.getState().equals(PUBLISHED)) {
@@ -219,7 +219,7 @@ public class EventService {
         Event event = getEventById(eventId);
 
         if (!event.getInitiator().getId().equals(user.getId())) {
-            throw new IllegalStateException("You don't have event with id " + eventId);
+            throw new IllegalStateException("User don't have event with id " + eventId);
         }
 
         if (event.getConfirmedRequests() +

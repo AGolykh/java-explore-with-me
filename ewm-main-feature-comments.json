@@ -1,0 +1,611 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "\"Explore With Me\" Comments",
+    "description": "Documentation \"Explore With Me\" Comments API v1.0",
+    "contact": {
+      "name": "Golykh Aleksandr",
+      "email": "a.golykh@yandex.ru"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Public: Комментарии",
+      "description": "Публичный API для работы с комментариями"
+    },
+    {
+      "name": "Admin: Комментарии",
+      "description": "Админский API для работы с комментариями"
+    },
+    {
+      "name": "Private: Комментарии",
+      "description": "Закрытый API для работы с комментариями"
+    }
+  ],
+  "paths": {
+    "/users/{userId}/comments/{eventId}": {
+      "post": {
+        "tags": [
+          "Private: Комментарии"
+        ],
+        "summary": "Добавление нового комментария к событию",
+        "operationId": "createComment",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id события",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "id события",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentNewDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Пользователь не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Комментарий создан",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/comments/{commentId}": {
+      "delete": {
+        "tags": [
+          "Private: Комментарии"
+        ],
+        "summary": "Удаление комментариев по запросу от пользователя",
+        "operationId": "deleteCommentByUserRequest",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "id комментария",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "Пользователь не является автором комментария",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Пользователь не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Комментарий удален"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Private: Комментарии"
+        ],
+        "summary": "Обновление комментария",
+        "operationId": "updateComment",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "id комментария",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentNewDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Комментарий не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/comments": {
+      "get": {
+        "tags": [
+          "Private: Комментарии"
+        ],
+        "summary": "Получение комментариев пользователя",
+        "description": "Эндпоинт возвращает полную информацию обо всех комментариях, оставленных пользователем.\n\nВ случае, если нет ни одного комментария, возвращает пустой список",
+        "operationId": "getAllCommentsByUserId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Пользователь не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comments/{eventId}": {
+      "get": {
+        "tags": [
+          "Public: Комментарии"
+        ],
+        "summary": "Просмотр комментариев к событию",
+        "description": "Эндпоинт возвращает полную информацию обо всех комментариях к указанному событию\n\nВ случае, если по заданным фильтрам не найдено ни одного комментария, возвращает пустой список.",
+        "operationId": "getAllCommentsByEventId",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "id события",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Количество комментариев, которые нужно пропустить для формирования текущего набора",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Количество комментариев в наборе",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Событие не найдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/comments": {
+      "get": {
+        "tags": [
+          "Admin: Комментарии"
+        ],
+        "summary": "Поиск комментариев по параметрам",
+        "description": "Эндпоинт возвращает полную информацию обо всех комментариях, подходящих под переданные условия.\n\nВ случае, если по заданным фильтрам не найдено ни одного комментария, возвращает пустой список",
+        "operationId": "getAllCommentsByParams",
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "description": "Текст, присутствующий в комментарии",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "users",
+            "in": "query",
+            "description": "Список id пользователей, чьи комментарии нужно найти",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "events",
+            "in": "query",
+            "description": "Список id эвентов, в которых будет вестись поиск",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "name": "rangeStart",
+            "in": "query",
+            "description": "Дата и время не раньше которых должен быть опубликован комментарий",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "rangeEnd",
+            "in": "query",
+            "description": "Дата и время не позже которых должен быть опубликован комментарий",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Количество комментариев, которые нужно пропустить для формирования текущего набора",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Количество комментариев в наборе",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+        }
+      }
+    },
+    "/admin/comments/{commentId}": {
+      "delete": {
+        "tags": [
+          "Admin: Комментарии"
+        ],
+        "summary": "Удаление комментариев по запросу от администратора",
+        "description": "При удалении владельца комментария, удалятся так же и комментарий.\n\nПри удалении эвента, удалятся все комментарии к этому эвенту.",
+        "operationId": "deleteCommentByAdminRequest",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "id комментария",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Комментарий не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Комментарий удален"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "description": "Список стектрейсов или описания ошибок",
+            "example": [],
+            "items": {
+              "type": "string",
+              "description": "Список стектрейсов или описания ошибок",
+              "example": "[]"
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "Сообщение об ошибке",
+            "example": "Only pending or canceled events can be changed"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Общее описание причины ошибки",
+            "example": "For the requested operation the conditions are not met."
+          },
+          "status": {
+            "type": "string",
+            "description": "Код статуса HTTP-ответа",
+            "example": "FORBIDDEN",
+            "enum": [
+              "100 CONTINUE",
+              "101 SWITCHING_PROTOCOLS",
+              "102 PROCESSING",
+              "103 CHECKPOINT",
+              "200 OK",
+              "201 CREATED",
+              "202 ACCEPTED",
+              "203 NON_AUTHORITATIVE_INFORMATION",
+              "204 NO_CONTENT",
+              "205 RESET_CONTENT",
+              "206 PARTIAL_CONTENT",
+              "207 MULTI_STATUS",
+              "208 ALREADY_REPORTED",
+              "226 IM_USED",
+              "300 MULTIPLE_CHOICES",
+              "301 MOVED_PERMANENTLY",
+              "302 FOUND",
+              "302 MOVED_TEMPORARILY",
+              "303 SEE_OTHER",
+              "304 NOT_MODIFIED",
+              "305 USE_PROXY",
+              "307 TEMPORARY_REDIRECT",
+              "308 PERMANENT_REDIRECT",
+              "400 BAD_REQUEST",
+              "401 UNAUTHORIZED",
+              "402 PAYMENT_REQUIRED",
+              "403 FORBIDDEN",
+              "404 NOT_FOUND",
+              "405 METHOD_NOT_ALLOWED",
+              "406 NOT_ACCEPTABLE",
+              "407 PROXY_AUTHENTICATION_REQUIRED",
+              "408 REQUEST_TIMEOUT",
+              "409 CONFLICT",
+              "410 GONE",
+              "411 LENGTH_REQUIRED",
+              "412 PRECONDITION_FAILED",
+              "413 PAYLOAD_TOO_LARGE",
+              "413 REQUEST_ENTITY_TOO_LARGE",
+              "414 URI_TOO_LONG",
+              "414 REQUEST_URI_TOO_LONG",
+              "415 UNSUPPORTED_MEDIA_TYPE",
+              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
+              "417 EXPECTATION_FAILED",
+              "418 I_AM_A_TEAPOT",
+              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
+              "420 METHOD_FAILURE",
+              "421 DESTINATION_LOCKED",
+              "422 UNPROCESSABLE_ENTITY",
+              "423 LOCKED",
+              "424 FAILED_DEPENDENCY",
+              "425 TOO_EARLY",
+              "426 UPGRADE_REQUIRED",
+              "428 PRECONDITION_REQUIRED",
+              "429 TOO_MANY_REQUESTS",
+              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
+              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
+              "500 INTERNAL_SERVER_ERROR",
+              "501 NOT_IMPLEMENTED",
+              "502 BAD_GATEWAY",
+              "503 SERVICE_UNAVAILABLE",
+              "504 GATEWAY_TIMEOUT",
+              "505 HTTP_VERSION_NOT_SUPPORTED",
+              "506 VARIANT_ALSO_NEGOTIATES",
+              "507 INSUFFICIENT_STORAGE",
+              "508 LOOP_DETECTED",
+              "509 BANDWIDTH_LIMIT_EXCEEDED",
+              "510 NOT_EXTENDED",
+              "511 NETWORK_AUTHENTICATION_REQUIRED"
+            ]
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Дата и время когда произошла ошибка (в формате \"yyyy-MM-dd HH:mm:ss\")",
+            "example": "2022-06-09 06:27:23"
+          }
+        },
+        "description": "Сведения об ошибке"
+      },
+      "UserShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "id пользователя",
+            "format": "int64",
+            "example": 3
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя пользователя",
+            "example": "Фёдоров Матвей"
+          }
+        },
+        "description": "Пользователь"
+      },
+      "CommentNewDto": {
+        "required": [
+          "text"
+        ],
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Текст комментария"
+          }
+        },
+        "description": "Новый комментарий"
+      },
+      "CommentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "id комментария",
+            "format": "int64"
+          },
+          "text": {
+            "type": "string",
+            "description": "Текст комментария"
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserShortDto"
+          },
+          "eventId": {
+            "type": "integer",
+            "description": "id события",
+            "format": "int64"
+          },
+          "created": {
+            "type": "string",
+            "description": "Дата создания",
+            "format": "date-time"
+          }
+        },
+        "description": "Комментарий"
+      }
+    }
+  }
+}

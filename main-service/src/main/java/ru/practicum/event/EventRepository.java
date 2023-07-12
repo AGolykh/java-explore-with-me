@@ -19,11 +19,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "where (e.initiator.id in :users OR :users = null) " +
             "and (e.state in :states OR :states = null) " +
             "and (e.category.id in :categories OR :categories = null) " +
-            "and (cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
+            "and ((cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
             "and e.eventDate between cast(:rangeStart as date) and cast(:rangeEnd as date)) " +
             "or (cast(:rangeStart as date) = null and e.eventDate < cast(:rangeEnd as date)) " +
             "or (cast(:rangeEnd as date) = null and e.eventDate > cast(:rangeStart as date)) " +
-            "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null) ")
+            "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null)) ")
     List<Event> findEventsByParams(@Param("users") Set<Long> users,
                                    @Param("states") Set<State> states,
                                    @Param("categories") Set<Long> categories,
@@ -32,19 +32,19 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                    Pageable pageable);
 
     @Query(" select e from Event e " +
-            "where lower(e.annotation) like lower(concat('%', :text, '%')) " +
+            "where (lower(e.annotation) like lower(concat('%', :text, '%')) " +
             "or lower(e.description) like lower(concat('%', :text, '%')) " +
             "or lower(e.title) like lower(concat('%', :text, '%'))" +
-            "or :text = null " +
-            "and e.category.id in :categories or :categories = null " +
-            "and e.paid = :paid or :paid = null " +
-            "and (cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
+            "or :text = null) " +
+            "and (e.category.id in :categories or :categories = null) " +
+            "and (e.paid = :paid or :paid = null) " +
+            "and ((cast(:rangeStart as date) != null and cast(:rangeStart as date) != null " +
             "and e.eventDate between cast(:rangeStart as date) and cast(:rangeEnd as date) ) " +
             "or (cast(:rangeStart as date) = null and e.eventDate < cast(:rangeEnd as date) )" +
             "or (cast(:rangeEnd as date) = null and e.eventDate > cast(:rangeStart as date) )" +
             "or (cast(:rangeStart as date) = null and cast(:rangeStart as date) = null) " +
-            "and e.confirmedRequests < e.participantLimit or :onlyAvailable = null " +
-            "and  e.state = 'PUBLISHED' " +
+            "and (e.confirmedRequests < e.participantLimit or :onlyAvailable = null)) " +
+            "and (e.state = 'PUBLISHED') " +
             "order by :sortType")
     List<Event> findEventsByParams(@Param("text") String text,
                                    @Param("categories") Set<Long> categories,
